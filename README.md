@@ -2,8 +2,9 @@
 
 ## Contents
 
-- [Comments](#comments)
-- [Variables](#variables)
+- [Comments](#Comments)
+- [Variables](#Variables)
+- [Types](#Types)
 
 ### Comments
 
