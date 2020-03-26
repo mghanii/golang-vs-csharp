@@ -44,12 +44,14 @@ func main() {
 	var r [3]byte = [3]byte{1, 2, 3}
 
 	// ♦♦ Slice types ♦♦
-	// 📝 A slice is a descriptor for a contiguous segment of an underlying array and provides access to a numbered sequence of elements from that array.
+	// 📝 A slice is a descriptor for a contiguous segment of an underlying array
+	// and provides access to a numbered sequence of elements from that array.
 
 	var t []byte = []byte{1, 2, 3}
 
 	// ♦♦ Struct types ♦♦
-	// 📝 A struct is a sequence of named elements, called fields, each of which has a name and a type.
+	// 📝 A struct is a sequence of named elements, called fields,
+	// each of which has a name and a type.
 
 	var v struct{} = struct{}{} // An empty struct.
 
