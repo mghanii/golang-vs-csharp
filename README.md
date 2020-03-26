@@ -1,6 +1,7 @@
 ## Contents
 
 - [Comments](#comments)
+- [Variables](#variables)
 
 ### Comments
 
@@ -90,7 +91,7 @@ class Program
 }
 ```
 
-### GO
+### Go
 
 ```go
 package main
