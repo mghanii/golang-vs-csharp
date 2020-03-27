@@ -533,10 +533,12 @@ func main() {
 
 #### C&#35;
 
-C# doesn't have a type equivalent to golang's slice type
-However, System.Collections.Generic.List<T> is the most similar collection to slice:
-♦ List is implemented using an underlying array.
-♦ Its size is dynamically increased.
+C# doesn't have a type equivalent to golang's slice type.
+
+However, System.Collections.Generic.List<T> is the most similar collection to slice:<br/>
+
+♦ List is implemented using an underlying array.<br/>
+♦ Its size is dynamically increased.<br/>
 ♦ Has O(1) amortized time per insertion.
 
 C#7.2 introduced [Span&lt;T&gt;](https://docs.microsoft.com/en-us/dotnet/api/system.span-1?view=netcore-3.1) feature
