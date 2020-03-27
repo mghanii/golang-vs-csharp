@@ -1,5 +1,4 @@
-# Golang vs C#
-
+![govscsharp](https://user-images.githubusercontent.com/10288224/77720684-4abe2c00-6ff1-11ea-9074-71c9964e9ab4.png)
 ## Contents
 
 - [Comments](#Comments)
