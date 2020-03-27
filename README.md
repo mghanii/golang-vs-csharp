@@ -1,4 +1,4 @@
-# Golang for C# developers
+# Golang vs C#
 
 ## Contents
 
