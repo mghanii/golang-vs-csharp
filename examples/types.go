@@ -37,7 +37,6 @@ func main() {
 	// 📝 Strings are immutable: once created, it is impossible to change its contents.
 
 	var s string = "str"
-	var length int = len(s) // length of s
 
 	// ♦♦ Array types ♦♦
 	// 📝 An array is a numbered sequence of elements of a single type
