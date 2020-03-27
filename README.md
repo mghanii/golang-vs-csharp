@@ -1,6 +1,12 @@
 
+<h3 align="center">
+  <br />
+  <img src="https://user-images.githubusercontent.com/10288224/77723610-a391c280-6ff9-11ea-92af-19f5d7a2de9c.png" alt="go vs c#" />
+  <br />
+  <br />
+  <br />
+</h3>
 
-![govscsharp](https://user-images.githubusercontent.com/10288224/77723610-a391c280-6ff9-11ea-92af-19f5d7a2de9c.png)
 ## Contents
 
 - [Comments](#Comments)
