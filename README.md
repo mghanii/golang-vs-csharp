@@ -12,6 +12,7 @@
 - [Types](#Types)
   - [string](#string)
   - [array](#array)
+  - [slice](#slice)
 
 ### Comments
 
