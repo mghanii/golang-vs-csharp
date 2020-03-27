@@ -541,7 +541,7 @@ However, System.Collections.Generic.List<T> is the most similar collection to sl
 ♦ Its size is dynamically increased.<br/>
 ♦ Has O(1) amortized time per insertion.
 
-C#7.2 introduced [Span&lt;T&gt;](https://docs.microsoft.com/en-us/dotnet/api/system.span-1?view=netcore-3.1) feature
+Also C#7.2 introduced [Span&lt;T&gt;](https://docs.microsoft.com/en-us/dotnet/api/system.span-1?view=netcore-3.1) feature
 which references a contiguous memory that has already been allocated.
 
 #### Go
