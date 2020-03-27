@@ -2,7 +2,7 @@ using System;
 
 class Program
 {
-    static void Mainm(string[] args)
+    static void Main(string[] args)
     {
         // 📝 string represents an immutable sequence of Unicode characters.
 
