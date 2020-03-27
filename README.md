@@ -1,4 +1,4 @@
-![govscsharp](https://user-images.githubusercontent.com/10288224/77721422-835f0500-6ff3-11ea-886b-47a53501565c.png)
+![govscsharp](https://user-images.githubusercontent.com/10288224/77722308-126d1c80-6ff6-11ea-898c-d6deb280aaac.png)
 ## Contents
 
 - [Comments](#Comments)
