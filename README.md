@@ -7,7 +7,7 @@
 
 # Golang vs C&#35;
 
-This guide is intended for developers who want to learn Go coming from a C# development background and vice versa.
+This tutorial is intended to help developers learn Go coming from a C# development background and vice versa.
 
 ## Contents
 
