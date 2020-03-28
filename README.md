@@ -21,6 +21,11 @@ This tutorial is intended to help developers learn Go coming from a C# developme
   - [Class](#Class)
   - [Struct](#Struct)
   - [Interface](#interface)
+- [Functions](#Functions)
+  - [Overloading](#Functions)
+  - [Multiple return values](#Functions)
+  - [Default parameters](#Functions)
+  - [Anonymous functions](#Functions)
 
 ### Comments
 
@@ -1047,6 +1052,7 @@ internal class Program
 
 #### Go
 
+- Used to group related sets of methods.
 - Interfaces are implemented implicitly.
 - If a type implements a method with name and signature defined in an interface, then that type implements that interface.
 
@@ -1107,4 +1113,156 @@ func main() {
 	var d Drawable = c
 	d.draw() // Drawing circle
 }
+```
+
+### Functions
+
+#### C&#35;
+
+- In C# functions declared within a type (class, struct or interface).
+- Methods can be instane members or static (related to type rather than instances)
+- C# supports method and operator overloading.
+- Methods can return multiple values by using Tuple, ref or out.
+- Methods can passed around as variables or method arguments.
+
+```cs
+using System;
+
+internal class Program
+{
+  // Overloaded methods
+  public static int Sum(int a, int b) => a + b;
+
+  public static int Sum(int a, int b, int c) => a + b + c;
+
+  // Method with a parameter that takes a variable number of arguments
+  public static int Multiply(params int[] values)
+  {
+    var result = 1;
+
+    for (var i = 0; i < values.Length; i++)
+    {
+      result *= values[i];
+    }
+
+    return result;
+  }
+
+  // Method with multiple return values
+  public static Tuple<string, int, bool> GetValues()
+  {
+    return Tuple.Create("some value", 1, false);
+  }
+
+  // Func is a delegate type which holds a reference to a method
+  public static int Transform(Func<int, int> transformer, int value)
+  {
+    return transformer(value);
+  }
+
+  // Optional parameters
+  public static int Increment(int value, int step = 1)
+  {
+    return value + step;
+  }
+
+  public static int Square(int value) => value * value;
+
+  private static void Main(string[] args)
+  {
+    var square = Transform(Square, 3);
+    Console.WriteLine(square);       // 9
+
+    // Anonymous method
+    square = Transform(delegate (int value) { return value * value; }, 3);
+    Console.WriteLine(square);       // 9
+
+    Console.WriteLine(Sum(1, 2));    // 3
+    Console.WriteLine(Sum(1, 2, 3)); // 6
+
+    Console.WriteLine(Increment(1));    // 2
+    Console.WriteLine(Increment(1, 5)); // 6
+
+    Console.WriteLine(Multiply(1, 2));       // 2
+    Console.WriteLine(Multiply(1, 2, 3));    // 6
+    Console.WriteLine(Multiply(1, 2, 3, 4)); // 24
+
+    Console.ReadKey();
+  }
+}
+```
+
+#### Go
+
+- Go does not support overloding of methods and operators.
+- Go supports methods defined on struct types.
+
+```go
+package main
+
+import "fmt"
+
+// this method can be called with variable number of arguments
+func sum(values ...int) (result int) {
+
+	for _, v := range values {
+		result += v
+	}
+
+	return
+}
+
+func transform(transformer func(v int) int, value int) int {
+	return transformer(value)
+}
+
+// multiple return values
+func divide(a float32, b float32) (float32, error) {
+	if b == 0.0 {
+		return 0, fmt.Errorf("Attempted to divide by zero")
+	}
+	return a / b, nil
+}
+
+// Go supports methods defined on struct types.
+type user struct {
+	name string
+}
+
+// value receiver (receives a copy of user instance when called)
+func (u user) printName() {
+	fmt.Println(u.name)
+}
+
+//  pointer receiver (receives a pointer to user instance when called)
+func (u *user) printName2() {
+	fmt.Println(u.name)
+}
+
+func main() {
+	fmt.Println(sum(1, 2))    // 3
+	fmt.Println(sum(1, 2, 3)) //6
+
+	// Anonymous function
+	func(v int) {
+		fmt.Println(v) // 4
+	}(4)
+
+	// passing func around as variable or parameter
+	var square = transform(func(v int) int {
+		return v * v
+	}, 4)
+
+	fmt.Println(square) // 16
+
+	v, _ := divide(4, 2)
+	fmt.Println(v) // 2
+
+	var usr = user{name: "Adam"}
+
+	usr.printName()     // Adam
+	(&usr).printName2() // Adam
+
+}
+
 ```
