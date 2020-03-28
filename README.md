@@ -17,7 +17,8 @@ This tutorial is intended to help developers learn Go coming from a C# developme
   - [String](#string)
   - [Array](#array)
   - [Slice](#Slice)
-  - [Dictionary vs map](#Dictionary-vs-map)
+  - [Dictionary (C#)](#Dictionary-vs-map)
+  - [Map(Go)](#gomap)
   - [Class](#Class)
   - [Struct](#Struct)
   - [Interface](#interface)
@@ -30,6 +31,9 @@ This tutorial is intended to help developers learn Go coming from a C# developme
   - [Anonymous functions](#Functions)
 - [If](#If)
 - [Switch](#Switch)
+- [For](#For)
+  - [foreach (C#)](#For)
+  - [for range (Go)](#gofor)
 
 ### Comments
 
@@ -730,7 +734,7 @@ class Program
 }
 ```
 
-#### Go (Map)
+<h4 id=gomap>Go (Map)</h4>
 
 ```go
 package main
@@ -739,47 +743,49 @@ import "fmt"
 
 func main() {
 
-	// Initializes an empty map
-	m := map[string]int{}
+    // Initializes an empty map
+    m := map[string]int{}
 
-	m["key1"] = 10
-	m["key2"] = 20
-	m["key3"] = 30
+    m["key1"] = 10
+    m["key2"] = 20
+    m["key3"] = 30
 
-	fmt.Println(m) // map[key1:10 key2:20 key3:30]
+    fmt.Println(m) // map[key1:10 key2:20 key3:30]
 
-	// Deletes key from map
-	delete(m, "key2")
-	fmt.Println(m) // map[key1:10 key3:30]
+    // Deletes key from map
+    delete(m, "key2")
+    fmt.Println(m) // map[key1:10 key3:30]
 
-	// Update value of existing key
-	m["key1"] = 50
-	fmt.Println(m) // map[key1:50 key3:30]
+    // Update value of existing key
+    m["key1"] = 50
+    fmt.Println(m) // map[key1:50 key3:30]
 
-	// Iterate over a map
-	for key, value := range m {
-		fmt.Println(key, value)
-	}
+    // Iterate over a map
+    for key, value := range m {
+    	fmt.Println(key, value)
+    }
 
-	// Checks if key exists
-	if value, ok := m["key1"]; ok {
-		fmt.Println(value) // 50
-	}
+    // Checks if key exists
+    if value, ok := m["key1"]; ok {
+    	fmt.Println(value) // 50
+    }
 
-	// Initializes a map with initial allocation
-	m2 := make(map[string]int, 10)
-	_ = m2
+    // Initializes a map with initial allocation
+    m2 := make(map[string]int, 10)
+    _ = m2
 
-	// Initializes a map using map literals
-	colors := map[string]string{
-		"White": "#FFFFFF",
-		"Red":   "#FF0000",
-		"Green": "#0000FF",
-		"Blue":  "#008000",
-	}
+    // Initializes a map using map literals
+    colors := map[string]string{
+    	"White": "#FFFFFF",
+    	"Red":   "#FF0000",
+    	"Green": "#0000FF",
+    	"Blue":  "#008000",
+    }
 
-	fmt.Println(colors) // map[Blue:#008000 Green:#0000FF Red:#FF0000 White:#FFFFFF]
+    fmt.Println(colors) // map[Blue:#008000 Green:#0000FF Red:#FF0000 White:#FFFFFF]
+
 }
+
 ```
 
 ### Class
@@ -1430,6 +1436,8 @@ func main() {
 
 ### If
 
+---
+
 #### C&#35;
 
 ```cs
@@ -1504,6 +1512,8 @@ b is odd
 ```
 
 ### Switch
+
+---
 
 #### C&#35;
 
@@ -1669,4 +1679,128 @@ Executing f1...
 c is 0
 d is int
 d is int
+```
+
+### For
+
+---
+
+#### C&#35;
+
+```cs
+using System;
+
+class Program
+{
+  static void Main(string[] args)
+  {
+    var arr = new int[] { 1, 2, 3, 4, 5 };
+
+    // different ways for using for to print array elements
+
+    for (var i = 0; i < arr.Length; i++)
+    {
+      Console.Write(arr[i]);
+    }
+
+    Console.Write("\n");
+
+    var j = 0;
+
+    for (; j < arr.Length;)
+    {
+      Console.Write(arr[j]);
+      j++;
+    }
+
+    Console.Write("\n");
+
+    var k = 0;
+
+    for (; ; )
+    {
+      if (k >= arr.Length)
+        break;
+
+      Console.Write(arr[k]);
+      k++;
+    }
+
+    Console.Write("\nodd numbers:");
+
+    // print odd numbers in array
+    for (var m = 0; m < arr.Length; m++)
+    {
+      if (arr[m] % 2 == 0)
+        continue;
+
+      Console.Write(arr[m]);
+    }
+    Console.Write("\n");
+
+    // foreach iterates over any collection that implements IEnumerable
+    foreach (var item in arr)
+    {
+      Console.Write(item);
+    }
+
+    Console.ReadKey();
+  }
+}
+```
+
+output
+
+```bash
+12345
+12345
+12345
+odd numbers:135
+12345
+```
+
+<h4 id =gofor>Go</h4>
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+
+	a := 2
+
+	for a < 40 {
+		fmt.Printf("%v ", a)
+		a *= 2
+	}
+	fmt.Printf("\n")
+
+	arr := [...]int{1, 2, 3, 4, 5}
+
+	for i := 0; i < len(arr); i++ {
+		fmt.Printf("%v ", arr[i])
+	}
+
+	fmt.Printf("\n")
+
+	// for range
+	for _, v := range arr {
+		fmt.Printf("%v ", v)
+	}
+
+	// infinite loop
+	for {
+		break // break out of loop
+	}
+
+}
+```
+
+output
+
+```bash
+2 4 8 16 32
+1 2 3 4 5
+1 2 3 4 5
 ```
