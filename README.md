@@ -20,6 +20,7 @@ This tutorial is intended to help developers learn Go coming from a C# developme
   - [Dictionary vs map](#Dictionary-vs-map)
   - [Class](#Class)
   - [Struct](#Struct)
+  - [Interface](#interface)
 
 ### Comments
 
@@ -963,4 +964,147 @@ func main() {
 	fmt.Println(p4) // {Nora 50}
 }
 
+```
+
+### Interface
+
+#### C&#35;
+
+- Interface defines a contract.
+- A class or a struct can implement multiple interfaces.
+- Beginning with C# 8.0, interface can provide a default implementation for members.
+
+```cs
+using System;
+
+public interface IShape
+{
+  double GetArea();
+}
+
+public interface IDrawable
+{
+  void Draw();
+}
+
+public struct Point
+{
+  public int X { get; }
+  public int Y { get; }
+
+  public Point(int x, int y)
+  {
+    X = x;
+    Y = y;
+  }
+}
+
+public class Square : IShape
+{
+  public double Side { get; set; }
+
+  public Square(double side) => Side = side;
+
+  public double GetArea() => Side * Side;
+}
+
+// Multiple interface implementations
+public class Circle : IShape, IDrawable
+{
+  public Circle(Point center, double radius)
+  {
+    Center = center;
+    Radius = radius;
+  }
+
+  public Point Center { get; set; }
+  public double Radius { get; set; }
+
+  public double GetArea() => Math.PI * Radius * Radius;
+
+  public void Draw() => Console.WriteLine("Drawing Circle");
+}
+
+internal class Program
+{
+  private static void PrintArea(IShape shape)
+  {
+    Console.WriteLine(shape.GetArea());
+  }
+
+  private static void Main(string[] args)
+  {
+    var square = new Square(4);
+    PrintArea(square); // 16
+
+    var circle = new Circle(new Point(3, 6), 7);
+    PrintArea(circle); // 153.93804002589985
+
+    Console.ReadKey();
+  }
+}
+```
+
+#### Go
+
+- Interfaces are implemented implicitly.
+- If a type implements a method with name and signature defined in an interface, then that type implements that interface.
+
+```go
+package main
+
+import (
+	"fmt"
+	"math"
+)
+
+type Drawable interface {
+	draw()
+}
+
+type Shape interface {
+	getArea() float64
+}
+
+type Point struct {
+	X, Y int
+}
+
+type Square struct {
+	side float64
+}
+
+type Circle struct {
+	center Point
+	radius float64
+}
+
+// This method means type Circle implements the interface Shape
+func (c Circle) getArea() float64 {
+	return math.Pi * c.radius * c.radius
+}
+
+func (c Circle) draw() {
+	fmt.Println("Drawing circle")
+}
+
+func (s Square) getArea() float64 {
+	return s.side * s.side
+}
+
+func printArea(s Shape) {
+	fmt.Println(s.getArea())
+}
+
+func main() {
+	s := Square{side: 4}
+	c := Circle{Point{3, 6}, 7}
+
+	// Since both Square & Circle implement Shape interface, we can do the following:
+	printArea(s) // 16
+	printArea(c) // 153.93804002589985
+
+	var d Drawable = c
+	d.draw() // Drawing circle
+}
 ```
