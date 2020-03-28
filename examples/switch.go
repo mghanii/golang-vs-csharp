@@ -9,7 +9,7 @@ func f2() {
 	fmt.Println("Executing f2...")
 }
 func f3() {
-	fmt.Println("Executing f2...")
+	fmt.Println("Executing f3...")
 }
 
 func main() {

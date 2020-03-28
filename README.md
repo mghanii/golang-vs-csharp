@@ -34,6 +34,7 @@ This tutorial is intended to help developers learn Go coming from a C# developme
 - [For](#For)
   - [foreach (C#)](#For)
   - [for range (Go)](#gofor)
+- [While](#while)
 
 ### Comments
 
@@ -93,7 +94,7 @@ func main() {
 
 ---
 
-A variable is a storage location for holding a value.
+📝 A variable is a storage location for holding a value.
 
 #### C&#35;
 
@@ -166,7 +167,7 @@ func main() {
 
 ---
 
-A type defines the blueprint for a value.
+📝 A type defines the blueprint for a value.
 
 #### C&#35;
 
@@ -558,9 +559,9 @@ C# doesn't have an equivalent type to golang's slice type.
 
 However, System.Collections.Generic.List<T> is the most similar collection to slice:<br/>
 
-♦ List is implemented using an underlying array.<br/>
-♦ Its size is dynamically resized.<br/>
-♦ Has O(1) amortized time per insertion.
+📝 List is implemented using an underlying array.<br/>
+📝 Its size is dynamically resized.<br/>
+📝 Has O(1) amortized time per insertion.
 
 ```cs
 using System;
@@ -790,11 +791,11 @@ func main() {
 
 ### Class
 
-A class is a user-defined blueprint or prototype from which objects are created.
+📝 A class is a user-defined blueprint or prototype from which objects are created.
 
 #### C&#35;
 
-Class type is a reference type.
+📝 Class type is a reference type.
 
 ```cs
 using System;
@@ -879,13 +880,13 @@ class Program
 
 #### Go
 
-Go does not have classes.
+📝 Go does not have classes.
 
 ### Struct
 
 #### C&#35;
 
-Struct (or structure) is a value type, useful to hold small data values.
+📝 Struct (or structure) is a value type, useful to hold small data values.
 
 ```cs
 using System;
@@ -923,7 +924,7 @@ class Program
 
 #### Go: struct
 
-Struct in Go is a sequence of fields.
+📝 Struct in Go is a sequence of fields.
 
 ```go
 package main
@@ -985,9 +986,9 @@ func main() {
 
 #### C&#35;
 
-- Interface defines a contract.
-- A class or a struct can implement multiple interfaces.
-- Beginning with C# 8.0, interface can provide a default implementation for members.
+📝 Interface defines a contract. </br>
+📝 A class or a struct can implement multiple interfaces.</br>
+📝 Beginning with C# 8.0, interface can provide a default implementation for members.
 
 ```cs
 using System;
@@ -1062,9 +1063,9 @@ internal class Program
 
 #### Go: interface
 
-- Used to group related sets of methods.
-- Interfaces are implemented implicitly.
-- If a type implements a method with name and signature defined in an interface, then that type implements that interface.
+📝 Used to group related sets of methods.</br>
+📝 Interfaces are implemented implicitly.</br>
+📝 If a type implements a method with name and signature defined in an interface, then that type implements that interface.
 
 ```go
 package main
@@ -1285,11 +1286,11 @@ output
 
 #### C&#35;
 
-- In C# functions declared within a type (class, struct or interface).
-- Methods can be instane members or static (related to type rather than instances)
-- C# supports method and operator overloading.
-- Methods can return multiple values by using Tuple, ref or out.
-- Methods can passed around as variables or method arguments.
+📝 In C# functions declared within a type (class, struct or interface).</br>
+📝 Methods can be instane members or static (related to type rather than instances).</br>
+📝 C# supports method and operator overloading.</br>
+📝 Methods can return multiple values by using Tuple, ref or out.</br>
+📝 Methods can passed around as variables or method arguments.</br>
 
 ```cs
 using System;
@@ -1360,9 +1361,9 @@ internal class Program
 
 #### Go: functions
 
-- Go does not support overloding of methods and operators.
-- Go does not support function/method argument default value.
-- Go supports methods defined on struct types.
+📝 Go does not support overloding of methods and operators.</br>
+📝 Go does not support function/method argument default value.</br>
+📝 Go supports methods defined on struct types.
 
 ```go
 package main
@@ -1610,7 +1611,7 @@ func f2() {
 	fmt.Println("Executing f2...")
 }
 func f3() {
-	fmt.Println("Executing f2...")
+	fmt.Println("Executing f3...")
 }
 
 func main() {
@@ -1803,4 +1804,63 @@ output
 2 4 8 16 32
 1 2 3 4 5
 1 2 3 4 5
+```
+
+### while
+
+#### C&#35;
+
+```cs
+    var attempt = 1;
+
+    while (attempt <= 3)
+    {
+      Console.WriteLine($"attempt # {attempt}");
+      // do other stuff
+      attempt++;
+    }
+
+    // use break to exit
+    while (true)
+    {
+      break;
+    }
+
+    // do ... while: executed at least 1 time
+    do
+    {
+      Console.WriteLine("do while...");
+    } while (false);
+```
+
+output
+
+```bash
+attempt # 1
+attempt # 2
+attempt # 3
+do while...
+```
+
+#### Go: while
+
+📝Go doesn't have while keyword but same behavior can be achieved using for.
+
+```go
+	// we can get same while behavior using for:
+	var attempt = 1
+
+	for attempt <= 3 {
+		fmt.Printf("attempt # %v\n", attempt)
+		// do other stuff
+		attempt++
+	}
+```
+
+output
+
+```bash
+attempt # 1
+attempt # 2
+attempt # 3
 ```
