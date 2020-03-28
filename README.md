@@ -21,11 +21,15 @@ This tutorial is intended to help developers learn Go coming from a C# developme
   - [Class](#Class)
   - [Struct](#Struct)
   - [Interface](#interface)
+- [Type checking](#Type-checking)
+- [Type conversion](#Type-conversion)
 - [Functions](#Functions)
   - [Overloading](#Functions)
   - [Multiple return values](#Functions)
   - [Default parameters](#Functions)
   - [Anonymous functions](#Functions)
+- [If](#If)
+- [Switch](#Switch)
 
 ### Comments
 
@@ -669,7 +673,7 @@ func main() {
 
 ```
 
-### Dictionary-vs-map
+### Dictionary vs map
 
 #### C&#35; (Dictionary)
 
@@ -1115,6 +1119,162 @@ func main() {
 }
 ```
 
+### Type checking
+
+#### C&#35;
+
+```cs
+using System;
+
+class Shape { }
+
+class Circle : Shape { }
+
+class Program
+{
+  static void Main(string[] args)
+  {
+    // 1. typeof: returns System.Type instance for a type, resolved at compile time.
+    // 2. GetType: returns runtime type of an instance.
+    // 3. is: returns true if instance is of the same type as given type or drives from it.
+
+    Shape s = new Shape();
+    Shape c = new Circle();
+
+    Console.WriteLine(s is Shape);                       // true
+    Console.WriteLine(s is Circle);                      // false
+
+    Console.WriteLine(c.GetType() == typeof(Shape));     // false
+    Console.WriteLine(c is Shape);                       // true
+    Console.WriteLine(c.GetType() == typeof(Circle));    // true
+    Console.WriteLine(c is Circle);                      // true
+
+    Console.ReadKey();
+  }
+}
+```
+
+#### Go
+
+```go
+package main
+
+import (
+	"fmt"
+	"reflect"
+)
+
+func main() {
+
+	var a int64 = 4
+
+	fmt.Println(reflect.TypeOf(a).Kind() == reflect.Int64)
+
+	var b interface{} = 4
+
+	if _, isInt := b.(int); isInt {
+		fmt.Println("i is int")
+	}
+
+}
+```
+
+output
+
+```bash
+true
+i is int
+```
+
+### Type conversion
+
+#### C&#35;
+
+```cs
+using System;
+
+class Circle { }
+
+class Program
+{
+  static void Main(string[] args)
+  {
+    var circle = new Circle();
+
+    object obj = circle; // implicit conversion
+
+    // Reference type conversion using is
+    if (obj is Circle c)
+    {
+      Console.WriteLine("obj is Circle");
+    }
+
+    Circle c2 = (Circle)obj; // explicit conversion
+
+    var s = "12";
+    var a = int.Parse(s);
+    var b = Convert.ToInt32(s);
+
+    float d = 4.6F;
+    double e = d; // implicit cast
+    int f = (int)e; // explicit caset
+
+    Console.WriteLine(f);
+
+    decimal g = (decimal)d;
+
+    Console.ReadKey();
+  }
+}
+```
+
+output
+
+```bash
+obj is Circle
+4
+```
+
+#### Go
+
+```go
+package main
+
+import (
+	"fmt"
+	"strconv"
+)
+
+func main() {
+
+	var a int = 20
+	b := float32(a)
+	fmt.Printf("%v, %T\n", b, b)
+
+	d := strconv.Itoa(a)
+	fmt.Printf("%v, %T\n", d, d)
+
+	e, err := strconv.Atoi("123")
+	if err == nil {
+		fmt.Printf("%v, %T\n", e, e)
+	}
+
+	g, err := strconv.ParseInt("235", 10, 64)
+	if err == nil {
+		fmt.Printf("%v, %T\n", g, g)
+	}
+}
+```
+
+output
+
+```bash
+20, float32
+20, string
+123, int
+235, int64
+```
+
 ### Functions
 
 #### C&#35;
@@ -1266,4 +1426,247 @@ func main() {
 
 }
 
+```
+
+### If
+
+#### C&#35;
+
+```cs
+using System;
+
+class Program
+{
+  static void Main(string[] args)
+  {
+    int a = 4;
+    int b = 3;
+    int min;
+
+    if (a < b) min = a;
+    else min = b;
+
+    // above if statment could be rewritten using ternary operator:
+    min = a < b ? a : b;
+
+    if (a == 0)
+    {
+      Console.WriteLine("x is 0");
+    }
+    else if (a > 0)
+    {
+      Console.WriteLine("x is positive");
+    }
+    else
+    {
+      Console.WriteLine("x is negative");
+    }
+
+    Console.ReadKey();
+  }
+}
+```
+
+#### Go
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+
+	a := 2
+
+	if a < 0 {
+		fmt.Println("a is negative")
+	} else if a > 0 {
+		fmt.Println("a is positive")
+	} else {
+		fmt.Println("a is 0")
+	}
+
+	if b := a + 1; b%2 == 0 {
+		fmt.Println("b is even")
+	} else {
+		fmt.Println("b is odd")
+
+		//  📝 Go doesn't have ternary operator
+	}
+}
+```
+
+output
+
+```bash
+a is positive
+b is odd
+```
+
+### Switch
+
+#### C&#35;
+
+```cs
+using System;
+
+class Program
+{
+  static void Main(string[] args)
+  {
+    var color = "blue";
+
+    switch (color)
+    {
+      case "red":
+        Console.WriteLine("Red code is #FF0000");
+        break;
+
+      case "blue":
+        Console.WriteLine("Blue code is #0000FF");
+        break;
+
+      default:
+        Console.WriteLine("Invalid color");
+        break;
+    }
+
+    var a = 2;
+
+    switch (a)
+    {
+      case 1:
+      case 2:
+      case 3:
+        Console.WriteLine("case 1, 2 or 3");
+        break;
+
+      case 4:
+        Console.WriteLine("case 4");
+        break;
+
+      default:
+        Console.WriteLine("default case");
+        break;
+    }
+
+    // Checking for type (C# 7)
+
+    object obj = 4;
+
+    switch (obj)
+    {
+      case null:
+        Console.WriteLine("obj is null");
+        break;
+
+      case int v:
+        Console.WriteLine("obj is int");
+        break;
+
+      case string v:
+        Console.WriteLine("obj is string");
+        break;
+
+      default:
+        Console.WriteLine("obj type is not know");
+        break;
+    }
+
+    Console.ReadKey();
+  }
+}
+```
+
+output
+
+```bash
+Blue code is #0000FF
+case 1, 2 or 3
+obj is int
+```
+
+#### Go
+
+```go
+package main
+
+import "fmt"
+
+func f1() {
+	fmt.Println("Executing f1...")
+}
+func f2() {
+	fmt.Println("Executing f2...")
+}
+func f3() {
+	fmt.Println("Executing f2...")
+}
+
+func main() {
+
+	a := 2
+
+	switch {
+	case a == 1:
+		f1()
+	case a == 2:
+		f2()
+	default:
+		f3()
+	}
+
+	b := 10
+
+	switch b {
+	case 1, 10, 100:
+		f1()
+	case 2, 20:
+		f2()
+	default:
+		f3()
+	}
+
+	switch c := a - 2; {
+	case c < 0:
+		fmt.Println("c is negative")
+	case c > 0:
+		fmt.Println("c is positive")
+	default:
+		fmt.Println("c is 0")
+	}
+
+	// Type switch: compares types rather than values.
+
+	var d interface{} = 4
+
+	switch d.(type) {
+	case int:
+		fmt.Println("d is int")
+	case float32:
+		fmt.Println("d is float32")
+	default:
+		fmt.Println("type is not known")
+	}
+
+	// above switch could be rewritten:
+
+	if _, isInt := d.(int); isInt {
+		fmt.Println("d is int")
+	} else if _, isFloat32 := d.(float32); isFloat32 {
+		fmt.Println("d is float32")
+	} else {
+		fmt.Println("type is not known")
+	}
+}
+```
+
+output
+
+```bash
+Executing f2...
+Executing f1...
+c is 0
+d is int
+d is int
 ```
