@@ -1195,6 +1195,7 @@ internal class Program
 #### Go
 
 - Go does not support overloding of methods and operators.
+- Go does not support function/method argument default value.
 - Go supports methods defined on struct types.
 
 ```go
