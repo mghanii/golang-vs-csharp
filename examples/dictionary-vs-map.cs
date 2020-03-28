@@ -28,10 +28,23 @@ class Program
       Console.WriteLine($"Code of {kv.Key} is {kv.Value}");
     }
 
+    // check if key is exist
+
     if (!colors.ContainsKey("Yellow"))
     {
       // adds new key/value pair
       colors.Add("Yellow", "#FFEF00"); // or colors["Yellow"] = "#FFEF00";
+    }
+
+    if (!colors.TryGetValue("Yellow", out var _))
+    {
+      colors.Add("Yellow", "#FFEF00");
+    }
+
+    // TryAdd does nothing if key already exist
+    if (!colors.TryAdd("Yellow", "#FFEF00"))
+    {
+      Console.WriteLine("key already exists");
     }
   }
 }

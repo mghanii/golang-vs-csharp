@@ -5,6 +5,10 @@
   <br />
 </h3>
 
+# Golang vs C&#35;
+
+This guide is intended for developers who want to learn Go coming from a C# development background and vice versa.
+
 ## Contents
 
 - [Comments](#Comments)
@@ -534,7 +538,7 @@ func main() {
 
 #### C&#35;
 
-C# doesn't have a type equivalent to golang's slice type.
+C# doesn't have an equivalent type to golang's slice type.
 
 However, System.Collections.Generic.List<T> is the most similar collection to slice:<br/>
 
@@ -652,7 +656,7 @@ class Program
 
         Console.WriteLine(colors["Red"]); // #FF0000
 
-        // updates value of existing key
+        // update value of existing key
         colors["White"] = "#FFF";
 
         // iterate over dictionary
@@ -662,10 +666,23 @@ class Program
             Console.WriteLine($"Code of {kv.Key} is {kv.Value}");
         }
 
+        // check if key is exist
+
         if (!colors.ContainsKey("Yellow"))
         {
             // adds new key/value pair
             colors.Add("Yellow", "#FFEF00"); // or colors["Yellow"] = "#FFEF00";
+        }
+
+        if (!colors.TryGetValue("Yellow", out var _))
+        {
+            colors.Add("Yellow", "#FFEF00");
+        }
+
+        // TryAdd does nothing if key already exist
+        if (!colors.TryAdd("Yellow", "#FFEF00"))
+        {
+            Console.WriteLine("key already exists");
         }
     }
 }
@@ -680,8 +697,8 @@ import "fmt"
 
 func main() {
 
-	// declare empty map
-	m := map[string]int{} // or make(map[string]int)
+	// Initializes an empty map
+	m := map[string]int{}
 
 	m["key1"] = 10
 	m["key2"] = 20
@@ -689,24 +706,29 @@ func main() {
 
 	fmt.Println(m) // map[key1:10 key2:20 key3:30]
 
+	// Deletes key from map
 	delete(m, "key2")
 	fmt.Println(m) // map[key1:10 key3:30]
 
-	// update value of existing key
+	// Update value of existing key
 	m["key1"] = 50
 	fmt.Println(m) // map[key1:50 key3:30]
 
-	// iterate over map
+	// Iterate over a map
 	for key, value := range m {
 		fmt.Println(key, value)
 	}
 
-	// check if key exists
-
+	// Checks if key exists
 	if value, ok := m["key1"]; ok {
 		fmt.Println(value) // 50
 	}
 
+	// Initializes a map with initial allocation
+	m2 := make(map[string]int, 10)
+	_ = m2
+
+	// Initializes a map using map literals
 	colors := map[string]string{
 		"White": "#FFFFFF",
 		"Red":   "#FF0000",
