@@ -123,7 +123,7 @@ class Program
 }
 ```
 
-#### Go
+#### Go: variables
 
 ```go
 package main
@@ -238,7 +238,7 @@ class Program
 }
 ```
 
-#### Go
+#### Go: types
 
 ```go
 package main
@@ -386,7 +386,7 @@ class Program
 }
 ```
 
-#### Go
+#### Go: string
 
 ```go
 package main
@@ -498,7 +498,7 @@ class Program
 }
 ```
 
-#### Go
+#### Go: array
 
 ```go
 package main
@@ -595,7 +595,7 @@ class Program
 }
 ```
 
-#### Go
+#### Go: slice
 
 ```go
 package main
@@ -679,7 +679,7 @@ func main() {
 
 ### Dictionary vs map
 
-#### C&#35; (Dictionary)
+#### C&#35;: Dictionary
 
 ```cs
 using System;
@@ -734,7 +734,7 @@ class Program
 }
 ```
 
-<h4 id=gomap>Go (Map)</h4>
+<h4 id=gomap>Go: Map</h4>
 
 ```go
 package main
@@ -921,7 +921,7 @@ class Program
 }
 ```
 
-#### Go
+#### Go: struct
 
 Struct in Go is a sequence of fields.
 
@@ -1060,7 +1060,7 @@ internal class Program
 }
 ```
 
-#### Go
+#### Go: interface
 
 - Used to group related sets of methods.
 - Interfaces are implemented implicitly.
@@ -1160,7 +1160,7 @@ class Program
 }
 ```
 
-#### Go
+#### Go: type checking
 
 ```go
 package main
@@ -1241,7 +1241,7 @@ obj is Circle
 4
 ```
 
-#### Go
+#### Go: type conversion
 
 ```go
 package main
@@ -1358,7 +1358,7 @@ internal class Program
 }
 ```
 
-#### Go
+#### Go: functions
 
 - Go does not support overloding of methods and operators.
 - Go does not support function/method argument default value.
@@ -1475,7 +1475,7 @@ class Program
 }
 ```
 
-#### Go
+#### Go: if
 
 ```go
 package main
@@ -1596,7 +1596,7 @@ case 1, 2 or 3
 obj is int
 ```
 
-#### Go
+#### Go: switch
 
 ```go
 package main
@@ -1759,7 +1759,7 @@ odd numbers:135
 12345
 ```
 
-<h4 id =gofor>Go</h4>
+<h4 id =gofor>Go: for</h4>
 
 ```go
 package main
