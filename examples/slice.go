@@ -5,7 +5,7 @@ import "fmt"
 func main() {
 
 	// 📝 Slice: a descriptor for a contiguous segment of an underlying array
-	// its size is incremented dynamically.
+	// its size is dynamically resized.
 
 	a := []int{} // declare a new slice object
 

@@ -14,10 +14,12 @@ This tutorial is intended to help developers learn Go coming from a C# developme
 - [Comments](#Comments)
 - [Variables](#Variables)
 - [Types](#Types)
-  - [string](#string)
-  - [array](#array)
-  - [List vs slice](#List-vs-slice)
+  - [String](#string)
+  - [Array](#array)
+  - [Slice](#Slice)
   - [Dictionary vs map](#Dictionary-vs-map)
+  - [Class](#Class)
+  - [Struct](#Struct)
 
 ### Comments
 
@@ -534,7 +536,7 @@ func main() {
 }
 ```
 
-### List-vs-slice
+### Slice
 
 #### C&#35;
 
@@ -543,11 +545,41 @@ C# doesn't have an equivalent type to golang's slice type.
 However, System.Collections.Generic.List<T> is the most similar collection to slice:<br/>
 
 ♦ List is implemented using an underlying array.<br/>
-♦ Its size is dynamically increased.<br/>
+♦ Its size is dynamically resized.<br/>
 ♦ Has O(1) amortized time per insertion.
 
-Also C#7.2 introduced [Span&lt;T&gt;](https://docs.microsoft.com/en-us/dotnet/api/system.span-1?view=netcore-3.1) feature
-which references a contiguous memory that has already been allocated.
+```cs
+using System;
+
+class Program
+{
+  static void Main(string[] args)
+  {
+    // C#8 Ranges: https://docs.microsoft.com/en-us/dotnet/csharp/whats-new/csharp-8#indices-and-ranges
+
+    var arr = new int[] { 0, 1, 2, 3, 4, 5, 6, 7 };
+
+    var range = arr[3..^1];
+
+    Dump(range);    // 3456
+    Dump(arr[..]);  // 01234567
+    Dump(arr[..3]); // 012
+    Dump(arr[3..]); // 34567
+
+    Console.ReadKey();
+  }
+
+  static void Dump(int[] arr)
+  {
+    foreach (var i in arr)
+    {
+      Console.Write(i);
+    }
+
+    Console.Write("\n");
+  }
+}
+```
 
 #### Go
 
@@ -559,7 +591,7 @@ import "fmt"
 func main() {
 
 	// 📝 Slice: a descriptor for a contiguous segment of an underlying array
-	// its size is incremented dynamically.
+	// its size is dynamically resized.
 
 	a := []int{} // declare a new slice object
 
@@ -738,4 +770,197 @@ func main() {
 
 	fmt.Println(colors) // map[Blue:#008000 Green:#0000FF Red:#FF0000 White:#FFFFFF]
 }
+```
+
+### Class
+
+A class is a user-defined blueprint or prototype from which objects are created.
+
+#### C&#35;
+
+Class type is a reference type.
+
+```cs
+using System;
+
+class Person
+{
+  // Field
+  private string _name;
+
+  // Properties
+  public string Name
+  {
+    set
+    {
+      _name = value;
+    }
+    get
+    {
+      return _name;
+    }
+  }
+
+  // Auto property
+  public DateTime Birthdate { get; set; }
+
+  // Constructors
+
+  // Default constructor used to initialize fields to thier default values
+  public Person()
+  {
+  }
+
+  public Person(string name)
+  {
+    this.Name = name;
+  }
+
+  // Constructor chaining
+  public Person(string name, DateTime birthdate)
+      : this(name)
+  {
+    this.Birthdate = birthdate;
+  }
+
+  // Method
+  public int GetAge()
+  {
+    // ⚡ This is not a correct way to calculate age from birthdate
+    return DateTime.Today.Year - Birthdate.Year;
+  }
+}
+
+class Program
+{
+  static void Main(string[] args)
+  {
+    // Creating new instance of Person class
+
+    // using parameterless constructor
+    var p = new Person();
+
+    Console.WriteLine(p.Name);      // null
+    Console.WriteLine(p.Birthdate); // 1/1/0001 12:00:00 AM
+
+    // using parameterized constructors
+
+    var p2 = new Person("Adam");
+    Console.WriteLine(p2.Name);      // Adam
+
+    var p3 = new Person("Isaac", DateTime.Parse("02/20/2000"));
+    Console.WriteLine(p3.Name);      // Isaac
+    Console.WriteLine(p3.GetAge());
+
+    var p4 = p3; // p4 & p3 points to the same object
+    p4.Name = "Mohamed";
+    Console.WriteLine(p3.Name);      // Mohamed
+
+    Console.ReadKey();
+  }
+}
+```
+
+#### Go
+
+Go does not have classes.
+
+### Struct
+
+#### C&#35;
+
+Struct (or structure) is a value type, useful to hold small data values.
+
+```cs
+using System;
+
+struct Point
+{
+  public int X { get; }
+  public int Y { get; }
+
+  public Point(int x, int y)
+  {
+    X = x;
+    Y = y;
+  }
+
+  public override string ToString() => $"({X}, {Y})";
+}
+
+class Program
+{
+  static void Main(string[] args)
+  {
+    // Struct instantiation:
+
+    var p = new Point(5, 7);
+
+    Console.WriteLine(p.ToString()); // (5, 7)
+
+    var p2 = p; // p2 is a copy of p
+
+    Console.ReadKey();
+  }
+}
+```
+
+#### Go
+
+Struct in Go is a sequence of fields.
+
+```go
+package main
+
+import "fmt"
+
+type Person struct {
+	name string
+	age  int
+}
+
+func (p *Person) printAge() {
+	fmt.Printf("%v is %v years old\n", p.name, p.age)
+}
+
+func main() {
+
+	// Creating a new struct
+	p := Person{
+		name: "Adam",
+		age:  20,
+	}
+
+	fmt.Println(p)      // {Adam 20}
+	fmt.Println(p.name) // Adam
+
+	p2 := p // p2 is copy of p
+	p2.name = "Isaac"
+	fmt.Println(p)  // {Adam 20}
+	fmt.Println(p2) //{Isaac 20}
+
+	// & prefix yields a pointer to the struct
+	p3 := &p // p3 & p poins to the same object
+	p3.name = "Mohamed"
+	fmt.Println(p)   // {Mohamed 20}
+	fmt.Println(*p3) // {Mohamed 20}
+
+	p.printAge() // Mohamed is 20 years old
+
+	// Anonymous struct
+	p4 := struct {
+		name string
+		age  int
+	}{
+		name: "Nora",
+		age:  30,
+	}
+
+	fmt.Println(p4) // {Nora 30}
+
+	// Structs are mutable
+	p4.age = 50
+	fmt.Println(p4) // {Nora 50}
+}
+
 ```
