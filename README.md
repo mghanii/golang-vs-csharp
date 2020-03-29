@@ -559,9 +559,9 @@ C# doesn't have an equivalent type to golang's slice type.
 
 However, System.Collections.Generic.List<T> is the most similar collection to slice:<br/>
 
-📝 List is implemented using an underlying array.<br/>
-📝 Its size is dynamically resized.<br/>
-📝 Has O(1) amortized time per insertion.
+- List is implemented using an underlying array.
+- Its size is dynamically resized.
+- Has O(1) amortized time per insertion.
 
 ```cs
 using System;
@@ -795,7 +795,7 @@ func main() {
 
 #### C&#35;
 
-📝 Class type is a reference type.
+Class type is a reference type.
 
 ```cs
 using System;
@@ -880,13 +880,13 @@ class Program
 
 #### Go
 
-📝 Go does not have classes.
+Go does not have classes.
 
 ### Struct
 
 #### C&#35;
 
-📝 Struct (or structure) is a value type, useful to hold small data values.
+Struct (or structure) is a value type, useful to hold small data values.
 
 ```cs
 using System;
@@ -924,7 +924,7 @@ class Program
 
 #### Go: struct
 
-📝 Struct in Go is a sequence of fields.
+Struct in Go is a sequence of fields.
 
 ```go
 package main
@@ -986,9 +986,9 @@ func main() {
 
 #### C&#35;
 
-📝 Interface defines a contract. </br>
-📝 A class or a struct can implement multiple interfaces.</br>
-📝 Beginning with C# 8.0, interface can provide a default implementation for members.
+- Interface defines a contract.
+- A class or a struct can implement multiple interfaces.
+- Beginning with C# 8.0, interface can provide a default implementation for members.
 
 ```cs
 using System;
@@ -1063,9 +1063,9 @@ internal class Program
 
 #### Go: interface
 
-📝 Used to group related sets of methods.</br>
-📝 Interfaces are implemented implicitly.</br>
-📝 If a type implements a method with name and signature defined in an interface, then that type implements that interface.
+- Used to group related sets of methods.
+- Interfaces are implemented implicitly.
+- If a type implements a method with name and signature defined in an interface, then that type implements that interface.
 
 ```go
 package main
@@ -1286,11 +1286,11 @@ output
 
 #### C&#35;
 
-📝 In C# functions declared within a type (class, struct or interface).</br>
-📝 Methods can be instane members or static (related to type rather than instances).</br>
-📝 C# supports method and operator overloading.</br>
-📝 Methods can return multiple values by using Tuple, ref or out.</br>
-📝 Methods can passed around as variables or method arguments.</br>
+- In C# functions declared within a type (class, struct or interface).
+- Methods can be instane members or static (related to type rather than instances).
+- C# supports method and operator overloading.
+- Methods can return multiple values by using Tuple, ref or out.
+- Methods can passed around as variables or method arguments.
 
 ```cs
 using System;
@@ -1361,9 +1361,9 @@ internal class Program
 
 #### Go: functions
 
-📝 Go does not support overloding of methods and operators.</br>
-📝 Go does not support function/method argument default value.</br>
-📝 Go supports methods defined on struct types.
+- Go does not support overloding of methods and operators.
+- Go does not support function/method argument default value.
+- Go supports methods defined on struct types.
 
 ```go
 package main
@@ -1647,6 +1647,20 @@ func main() {
 		fmt.Println("c is 0")
 	}
 
+	// fallthrough: transfers control to the first statement of the next case
+	i := 1
+
+	switch i {
+	case 1:
+		fmt.Println("case 1")
+		fallthrough
+	case 2:
+		fmt.Println("case 2")
+	default:
+		fmt.Println("default")
+
+	}
+
 	// Type switch: compares types rather than values.
 
 	var d interface{} = 4
@@ -1678,6 +1692,8 @@ output
 Executing f2...
 Executing f1...
 c is 0
+case 1
+case 2
 d is int
 d is int
 ```
@@ -1823,6 +1839,8 @@ output
     // use break to exit
     while (true)
     {
+	  // do stuff
+
       break;
     }
 
@@ -1844,7 +1862,7 @@ do while...
 
 #### Go: while
 
-📝Go doesn't have while keyword but same behavior can be achieved using for.
+Go doesn't have while keyword but same behavior can be achieved using for.
 
 ```go
 	// we can get same while behavior using for:

@@ -45,6 +45,20 @@ func main() {
 		fmt.Println("c is 0")
 	}
 
+	// fallthrough: transfers control to the first statement of the next case
+	i := 1
+
+	switch i {
+	case 1:
+		fmt.Println("case 1")
+		fallthrough
+	case 2:
+		fmt.Println("case 2")
+	default:
+		fmt.Println("default")
+
+	}
+
 	// Type switch: compares types rather than values.
 
 	var d interface{} = 4
