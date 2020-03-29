@@ -27,7 +27,19 @@ func main() {
 
 	// infinite loop
 	for {
+		// do stuff
 		break // break out of loop
+	}
+
+	// break statement terminates execution of the innermost loop
+	// to terminate execution of outer loop use lables or functions (return)
+outerLoop:
+	for m := 0; m < 3; i++ {
+		for n := 0; n < 5; n++ {
+			if m*n == 12 {
+				break outerLoop
+			}
+		}
 	}
 
 }

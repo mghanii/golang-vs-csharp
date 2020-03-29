@@ -25,6 +25,7 @@ This tutorial is intended to help developers learn Go coming from a C# developme
 - [Type checking](#Type-checking)
 - [Type conversion](#Type-conversion)
 - [Functions](#Functions)
+  - [Methods](#Functions)
   - [Overloading](#Functions)
   - [Multiple return values](#Functions)
   - [Default parameters](#Functions)
@@ -35,6 +36,7 @@ This tutorial is intended to help developers learn Go coming from a C# developme
   - [foreach (C#)](#For)
   - [for range (Go)](#gofor)
 - [While](#while)
+- [Closures](#Closures)
 
 ### Comments
 
@@ -94,7 +96,7 @@ func main() {
 
 ---
 
-📝 A variable is a storage location for holding a value.
+A variable is a storage location for holding a value.
 
 #### C&#35;
 
@@ -167,7 +169,7 @@ func main() {
 
 ---
 
-📝 A type defines the blueprint for a value.
+A type defines the blueprint for a value.
 
 #### C&#35;
 
@@ -1363,6 +1365,7 @@ internal class Program
 
 - Go does not support overloding of methods and operators.
 - Go does not support function/method argument default value.
+- A Method is a function with a receiver.
 - Go supports methods defined on struct types.
 
 ```go
@@ -1808,9 +1811,20 @@ func main() {
 
 	// infinite loop
 	for {
+		// do stuff
 		break // break out of loop
 	}
 
+	// break statement terminates execution of the innermost loop
+	// to terminate execution of outer loop use lables or functions (return)
+outerLoop:
+	for m := 0; m < 3; i++ {
+		for n := 0; n < 5; n++ {
+			if m*n == 12 {
+				break outerLoop
+			}
+		}
+	}
 }
 ```
 
@@ -1881,4 +1895,118 @@ output
 attempt # 1
 attempt # 2
 attempt # 3
+```
+
+### Closures
+
+#### C&#35;
+
+- Closure is a lambda expression that references parameters of method they're defined in or its local variables.
+
+- These variables survive as long as closure is accessible.
+
+```cs
+  static Func<int> Sequence(int start = 0)
+  {
+    // Closure captures method parameter
+    return () => start++;
+  }
+
+  static void Main(string[] args)
+  {
+    var stepSize = 2;
+    Func<int, int> incrementer = value => value + stepSize;
+    stepSize = 5;
+    Console.WriteLine(incrementer(3)); // 8
+
+    // The lifetime of captured method parameter is extended to that of the capturing delegate (seq)
+    var seq = Sequence();
+    Console.WriteLine(seq()); // 0
+    Console.WriteLine(seq()); // 1
+    Console.WriteLine(seq()); // 2
+
+    var seq2 = Sequence();
+    Console.WriteLine(seq2()); // 0
+
+    // Capturing iteration variables
+
+    // Below code is intended to print 01234
+    var func = new Func<int>[5];
+    for (int i = 0; i < 5; i++)
+      func[i] = () => i;
+
+    foreach (var f in func)
+      Console.Write(f()); // 55555
+
+    // In this example iteration variable "i" is treaded as it's declared outside the for statement.
+    // To get the expected result, define a new variable inside the loop, copy the iteration value to that.
+    for (int i = 0; i < 5; i++)
+    {
+      int k = i;
+      func[i] = () => k;
+    }
+
+    foreach (var f in func)
+      Console.Write(f()); // 01234
+	}
+```
+
+#### Go
+
+- Closure: an anonymous function references an outer variable.
+
+```go
+package main
+
+import "fmt"
+
+func sequence() func() int {
+	start := 0
+	return func() int {
+		start++
+		return start - 1
+	}
+}
+func main() {
+
+	// Captured variable (start) lifetime is extented to that of the capturing func(), seq.
+	seq := sequence()
+
+	fmt.Println(seq()) // 0
+	fmt.Println(seq()) // 1
+	fmt.Println(seq()) // 2
+
+	seq2 := sequence()
+	fmt.Println(seq2()) // 0
+
+	// Capturing iteration variables
+
+	// Below code is intended to print 01234
+	// but it prints 55555 because i is captured by anonymous function
+	var arr [5]func()
+
+	for i := 0; i < len(arr); i++ {
+		arr[i] = func() {
+			fmt.Print(i)
+		}
+	}
+
+	for _, f := range arr {
+		f()
+	}
+
+	// to get expected result:
+	for i := 0; i < len(arr); i++ {
+		k := i
+		arr[i] = func() {
+			fmt.Print(k)
+		}
+	}
+
+	fmt.Print("\n")
+
+	for _, f := range arr {
+		f()
+	}
+}
 ```
