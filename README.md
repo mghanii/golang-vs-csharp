@@ -37,6 +37,14 @@ This tutorial is intended to help developers learn Go coming from a C# developme
   - [for range (Go)](#gofor)
 - [While](#while)
 - [Closures](#Closures)
+- [Error handling](#Error-handling)
+  - [try/catch (C#)](#Error-handling)
+  - [exceptions (C#)](#Error-handlingr)
+  - [errors](#goerrors)
+- [throw / panic](#throwpanic)
+- [Clean-up](#clean-up)
+  - [finally](#clean-up)
+  - [defer](#gocleanup)
 
 ### Comments
 
@@ -1967,6 +1975,7 @@ func sequence() func() int {
 		return start - 1
 	}
 }
+
 func main() {
 
 	// Captured variable (start) lifetime is extented to that of the capturing func(), seq.
@@ -2008,5 +2017,219 @@ func main() {
 	for _, f := range arr {
 		f()
 	}
+}
+```
+
+### Error handling
+
+#### C&#35;
+
+```cs
+using System;
+using System.IO;
+
+class Program
+{
+  static void Main(string[] args)
+  {
+    // All exceptions in c# inherits from System.Exception class
+
+    string filePath = null;
+    FileStream stream = null;
+
+    try
+    {
+      // try block contains the code causing exception
+
+      stream = File.Open(filePath, FileMode.Open);
+
+      //...
+    }
+    catch (ArgumentException ex) // handles exceptions of type ArgumentException
+    {
+      Console.WriteLine($"ArgumentException: {ex.Message}");
+    }
+    catch (Exception ex) // handles any exception
+    {
+      Console.WriteLine(ex.Message);
+    }
+    finally
+    {
+      // will always execute whether an exception is thrown or not.
+
+      if (stream != null)
+        stream.Close();
+    }
+  }
+}
+```
+
+<h4 id=goerrors>Go: error handling</h4>
+
+```go
+package main
+
+import (
+	"errors"
+	"fmt"
+)
+
+func divide(a int, b int) (int, error) {
+	if b == 0.0 {
+		return 0, fmt.Errorf("Attempted to divide by zero")
+	}
+	return a / b, nil
+}
+
+func main() {
+	// Go doesn't handle exceptions as C# does,
+	// there is no tryr/catch, instead errors are returned as a method return value.
+	// "error" is a built-in interface, which you can implement to create a custom errors .
+
+	a, b := 4, 0
+
+	result, err := divide(a, b)
+
+	if err != nil {
+		// handle error
+		fmt.Println("Error: ", err)
+	} else {
+		fmt.Printf("%v / %v = %v", a, b, result)
+	}
+
+	// to create an error:
+	_ = fmt.Errorf("error message")
+	// or
+	_ = errors.New("error message")
+
+}
+```
+
+output
+
+```bash
+Error:  Attempted to divide by zero
+```
+
+<h3 id=throwpanic>throw / panic</h3>
+
+#### C&#35;: throw
+
+```cs
+ static void Display(string name)
+  {
+    if (string.IsNullOrEmpty(name))
+      throw new ArgumentNullException(nameof(name), "name can't be null or empty");
+
+    Console.WriteLine($"Hello, {name}");
+  }
+
+  static void Main(string[] args)
+  {
+    // throw: rethrows same exception and preserves original stack trace.
+    // throw ex: rethrows exception and resets the stack trace.
+    try
+    {
+      var name = Console.ReadLine();
+      Display(name);
+    }
+    catch (Exception ex)
+    {
+      //  throw;
+      //  throw ex;
+      Console.WriteLine(ex.Message);
+    }
+  }
+```
+
+#### Go: panic
+
+```go
+package main
+
+import (
+	"fmt"
+)
+
+func divide(a int, b int) int {
+	if b == 0.0 {
+		// panic is similar to C#'s exceptions, it's a run-time error.
+		// panic() function terminates the flow of control and starts panicking.
+		panic("Attempted to divide by zero")
+	}
+	return a / b
+}
+
+func main() {
+	// recover(): regains control of a panicking goroutine.
+	// defer function always run even if the program panics.
+	defer func() {
+		if x := recover(); x != nil {
+			fmt.Println("run time panic: ", x)
+		}
+	}()
+
+	fmt.Println("main start")
+	_ = divide(4, 0)
+}
+```
+
+### Clean-up
+
+#### C&#35;
+
+```cs
+// "using" statement is used to automatically dispose an object once using statement is exited (by reaching block end or by an exception).
+// The objects specified within the using block must implement the IDisposable interface.
+// IDisposable interface contains Dispose method which can be invoked when object is no longer needed.
+
+using (var fileStream = File.Open("path/to/file", FileMode.Open))
+{
+   // ....
+}
+
+// this is equivalent to:
+FileStream fs = null;
+
+try
+{
+   fs = File.Open("path/to/file", FileMode.Open);
+
+   // ...
+}
+finally
+{
+   if (fs != null)
+      fs.Dispose();
+}
+```
+
+<h4 id=gocleanup>Go: cleanup</h4>
+
+```go
+package main
+
+import (
+	"fmt"
+	"os"
+)
+
+func main() {
+
+	file, err := os.Create("/path/to/file")
+
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	// Defere is used for clean-up activities
+	// Deferred function calls are executed in
+	// Last In First Out order after the surrounding function returns
+
+	defer file.Close()
+
+	// write to  file
+	fmt.Fprintln(file, "test test...")
+
 }
 ```

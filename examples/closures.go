@@ -9,6 +9,7 @@ func sequence() func() int {
 		return start - 1
 	}
 }
+
 func main() {
 
 	// Captured variable (start) lifetime is extented to that of the capturing func(), seq.
