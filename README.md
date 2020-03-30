@@ -2547,6 +2547,9 @@ True
 
 #### Go: pointers
 
+- For safety reasons, Go doesn't suport pointer arithmetic.
+- You can get around this by using [unsafe](https://pkg.go.dev/unsafe?tab=doc) package
+
 ```go
 package main
 
