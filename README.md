@@ -46,7 +46,7 @@ This tutorial is intended to help developers learn Go coming from a C# developme
   - [finally](#cleanup)
   - [defer](#gocleanup)
 - [Inheritance](#inheritance)
-- [Poly­mor­phism](#polmorphism)
+- [Polymorphism](#polymorphism)
 
 <h3 id=comments>🔶 Comments</h3>
 
@@ -2385,7 +2385,7 @@ name: Kitty, age: 2
 Kitty is sleeping
 ```
 
-<h3 id=poly­mor­phism>🔶 Poly­mor­phism</h3>
+<h3 id='polymorphism'>🔶 Polymorphism</h3>
 
 ---
 
@@ -2396,8 +2396,8 @@ Kitty is sleeping
 - Runtime poly­mor­phism:
   - method overriding through inheritance.
 
-◾ A polymorphic behavior can be achieved by using features like
-variance (covariance and contravariance)
+> A polymorphic behavior can be achieved by using features like
+> variance (covariance and contravariance)
 
 #### Go
 
