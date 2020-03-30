@@ -11,8 +11,8 @@ This tutorial is intended to help developers learn Go coming from a C# developme
 
 ## Contents
 
-- [Comments](#Comments)
-- [Variables](#Variables)
+- [Comments](#comments)
+- [Variables](#variables)
 - [Types](#Types)
   - [String](#string)
   - [Array](#array)
@@ -22,31 +22,32 @@ This tutorial is intended to help developers learn Go coming from a C# developme
   - [Class](#Class)
   - [Struct](#Struct)
   - [Interface](#interface)
-- [Type checking](#Type-checking)
-- [Type conversion](#Type-conversion)
-- [Functions](#Functions)
-  - [Methods](#Functions)
-  - [Overloading](#Functions)
-  - [Multiple return values](#Functions)
-  - [Default parameters](#Functions)
-  - [Anonymous functions](#Functions)
-- [If](#If)
-- [Switch](#Switch)
-- [For](#For)
-  - [foreach (C#)](#For)
+- [Type checking](#typechecking)
+- [Type conversion](#typeconversion)
+- [Functions](#functions)
+  - [Methods](#functions)
+  - [Overloading](#functions)
+  - [Multiple return values](#functions)
+  - [Default parameters](#functions)
+  - [Anonymous functions](#functions)
+- [If](#if)
+- [Switch](#switch)
+- [For](#for)
+  - [foreach (C#)](#for)
   - [for range (Go)](#gofor)
 - [While](#while)
 - [Closures](#Closures)
-- [Error handling](#Error-handling)
-  - [try/catch (C#)](#Error-handling)
-  - [exceptions (C#)](#Error-handlingr)
+- [Error handling](#errorhandling)
+  - [try/catch (C#)](#errorhandling)
+  - [exceptions (C#)](#errorhandling)
   - [errors](#goerrors)
 - [throw / panic](#throwpanic)
-- [Clean-up](#clean-up)
-  - [finally](#clean-up)
+- [Clean-up](#cleanup)
+  - [finally](#cleanup)
   - [defer](#gocleanup)
+- [Inheritance](#inheritance)
 
-### Comments
+<h3 id=comments>🔶 Comments</h3>
 
 ---
 
@@ -100,7 +101,7 @@ func main() {
 
 ```
 
-### Variables
+<h3 id=variables>🔶 Variables</h3>
 
 ---
 
@@ -173,7 +174,7 @@ func main() {
 }
 ```
 
-### Types
+<h3 id=types>🔶 Types</h3>
 
 ---
 
@@ -339,6 +340,8 @@ func main() {
 
 ### string
 
+---
+
 #### C&#35;
 
 ```cs
@@ -467,6 +470,8 @@ func main() {
 
 ### array
 
+---
+
 #### C&#35;
 
 ```cs
@@ -562,6 +567,8 @@ func main() {
 ```
 
 ### Slice
+
+---
 
 #### C&#35;
 
@@ -690,6 +697,8 @@ func main() {
 
 ### Dictionary vs map
 
+---
+
 #### C&#35;: Dictionary
 
 ```cs
@@ -801,6 +810,8 @@ func main() {
 
 ### Class
 
+---
+
 📝 A class is a user-defined blueprint or prototype from which objects are created.
 
 #### C&#35;
@@ -893,6 +904,8 @@ class Program
 Go does not have classes.
 
 ### Struct
+
+---
 
 #### C&#35;
 
@@ -993,6 +1006,8 @@ func main() {
 ```
 
 ### Interface
+
+---
 
 #### C&#35;
 
@@ -1136,7 +1151,9 @@ func main() {
 }
 ```
 
-### Type checking
+<h3 id=typechecking>🔶 Type checking</h3>
+
+---
 
 #### C&#35;
 
@@ -1203,7 +1220,9 @@ true
 i is int
 ```
 
-### Type conversion
+<h3 id=typeconversion>🔶 Type conversion</h3>
+
+---
 
 #### C&#35;
 
@@ -1292,7 +1311,9 @@ output
 235, int64
 ```
 
-### Functions
+<h3 id=functions>🔶 Functions</h3>
+
+---
 
 #### C&#35;
 
@@ -1446,7 +1467,7 @@ func main() {
 
 ```
 
-### If
+<h3 id=if>🔶 If</h3>
 
 ---
 
@@ -1523,7 +1544,7 @@ a is positive
 b is odd
 ```
 
-### Switch
+<h3 id=switch>🔶 Switch</h3>
 
 ---
 
@@ -1709,7 +1730,7 @@ d is int
 d is int
 ```
 
-### For
+<h3 id=for>🔶 For</h3>
 
 ---
 
@@ -1844,7 +1865,9 @@ output
 1 2 3 4 5
 ```
 
-### while
+ <h3 id=while>🔶 while</h3>
+
+---
 
 #### C&#35;
 
@@ -1905,7 +1928,9 @@ attempt # 2
 attempt # 3
 ```
 
-### Closures
+<h3 id=closures>🔶 Closures</h3>
+
+---
 
 #### C&#35;
 
@@ -2020,7 +2045,9 @@ func main() {
 }
 ```
 
-### Error handling
+<h3 id=errorhandling>🔶 Error handling</h3>
+
+---
 
 #### C&#35;
 
@@ -2111,7 +2138,9 @@ output
 Error:  Attempted to divide by zero
 ```
 
-<h3 id=throwpanic>throw / panic</h3>
+<h3 id=throwpanic>🔶 throw / panic</h3>
+
+---
 
 #### C&#35;: throw
 
@@ -2174,12 +2203,15 @@ func main() {
 }
 ```
 
-### Clean-up
+<h3 id=cleanup>🔶 Clean up</h3>
+
+---
 
 #### C&#35;
 
 ```cs
-// "using" statement is used to automatically dispose an object once using statement is exited (by reaching block end or by an exception).
+// "using" statement is used to automatically dispose an object once
+//     using statement is exited (by reaching block end or by an exception).
 // The objects specified within the using block must implement the IDisposable interface.
 // IDisposable interface contains Dispose method which can be invoked when object is no longer needed.
 
@@ -2232,4 +2264,122 @@ func main() {
 	fmt.Fprintln(file, "test test...")
 
 }
+```
+
+<h3 id=inheritance>🔶 Inheritance</h3>
+
+---
+
+- Inheritance is "is a" relationship: Dog is an Animal.
+- Method overriding: change the implementation of a function  
+   in the child class that is defined in the parent class.
+- C# doesn't support multiple inheritance through classes.
+- Any class or struct can implement multiple interfaces.
+- Structs don't support inheritance since it's a value type.
+
+#### C&#35;
+
+```cs
+using System;
+
+internal class Base
+{
+  public virtual void SomeMethod() => Console.WriteLine("I am Base");
+}
+
+internal class DerivedA : Base
+{
+  // this method overrides Base's SomeMethod implementation.
+  public override void SomeMethod() => Console.WriteLine("I am Derived_A");
+}
+
+internal class DerivedB : DerivedA
+{
+  public new void SomeMethod() => Console.WriteLine("I am Derived_B");
+}
+
+internal class Program
+{
+  private static void Main(string[] args)
+  {
+    Base baseObj = new Base();
+    Base ba = new DerivedA();
+    Base bb = new DerivedB();
+    DerivedB b = new DerivedB();
+
+    baseObj.SomeMethod();
+    ba.SomeMethod();
+    bb.SomeMethod();
+    b.SomeMethod();
+
+    Console.ReadKey();
+  }
+}
+```
+
+output
+
+```bash
+I am Base
+I am Derived_A
+I am Derived_A
+I am Derived_B
+```
+
+#### Go
+
+Go doesn’t support inheritance, but supports struct embed­ding and composition to reuse code.
+
+```go
+package main
+
+import "fmt"
+
+type Animal struct {
+	name string
+	age  int
+}
+
+// struct embed­ding
+type Dog struct {
+	Animal
+	breed string
+}
+
+// struct composition
+type Cat struct {
+	pet Animal
+}
+
+func (a *Animal) Description() string {
+	return fmt.Sprintf("name: %v, age: %v", a.name, a.age)
+}
+
+func (a *Animal) Sleep() {
+	fmt.Printf("%v is sleeping\n", a.name)
+}
+
+func (c *Cat) Sleep() {
+	c.pet.Sleep()
+}
+
+func main() {
+	dog := Dog{Animal: Animal{name: "Max", age: 3}, breed: "Basenji"}
+	fmt.Println(dog.Description())
+	dog.Sleep()
+
+	cat := Cat{pet: Animal{name: "Kitty", age: 2}}
+
+	fmt.Println(cat.pet.Description())
+	cat.Sleep()
+}
+```
+
+output
+
+```bash
+name: Max, age: 3
+Max is sleeping
+name: Kitty, age: 2
+Kitty is sleeping
 ```
