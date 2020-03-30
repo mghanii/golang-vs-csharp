@@ -47,6 +47,7 @@ This tutorial is intended to help developers learn Go coming from a C# developme
   - [defer](#gocleanup)
 - [Inheritance](#inheritance)
 - [Polymorphism](#polymorphism)
+- [Pointers](#pointers)
 
 <h3 id=comments>🔶 Comments</h3>
 
@@ -2273,10 +2274,10 @@ func main() {
 
 - Inheritance is "is a" relationship: Dog is an Animal.
 - Method overriding: change the implementation of a function  
-   in the child class that is defined in the parent class.
+   in the derived class that is defined in the base class.
 - C# doesn't support multiple inheritance through classes.
 - Any class or struct can implement multiple interfaces.
-- Structs don't support inheritance since it's a value type.
+- Structs don't support inheritance.
 
 #### C&#35;
 
@@ -2327,7 +2328,7 @@ I am Derived_A
 I am Derived_B
 ```
 
-#### Go
+#### Go: inheritance
 
 Go doesn’t support inheritance, but supports struct embed­ding and composition to reuse code.
 
@@ -2450,4 +2451,157 @@ output
 ```bash
 area of Square is 9
 area of Circle is 28.274333882308138
+```
+
+<h3 id=pointers>🔶 Pointers</h3>
+
+---
+
+#### C&#35;
+
+When you pass a variable to a method:
+
+- if it's value type, you pass a copy of variable's value.
+- if it's reference type, you pass a copy of reference to the object.
+- ref keyword is used to pass variable by reference.
+
+- C# does not support pointer arithmetic, by default.
+- Pointers can be used only inside an unsafe context, using unsafe keword.
+
+```cs
+using System;
+
+class Cat
+{
+  public string Name { get; set; }
+}
+
+class Program
+{
+  static void RenameCat(Cat cat) => cat.Name = "Max";
+
+  static void PassReferenceTypeByValueTest(Cat c) => c = null;
+
+  static void PassReferenceTypeByReferenceTest(ref Cat c) => c = null;
+
+  static void PassValueTypeByReferenceTest(ref int n) => n++;
+
+  static void PassValueTypeByValueTest(int n) => n++;
+
+  static void Main(string[] args)
+  {
+    var cat = new Cat { Name = "Kitty" };
+
+    // passing reference rypes by value: passing a copy of cat reference
+    RenameCat(cat);
+    Console.WriteLine(cat.Name);
+
+    PassReferenceTypeByValueTest(cat);
+    Console.WriteLine(cat is null);
+
+    // Passing reference rypes by reference
+    PassReferenceTypeByReferenceTest(ref cat);
+    Console.WriteLine(cat is null);
+
+    // value types:
+
+    var a = 1;
+
+    // Passing value types by value
+    PassValueTypeByValueTest(a);
+    Console.WriteLine(a);
+
+    // Passing value types by reference
+    PassValueTypeByReferenceTest(ref a);
+    Console.WriteLine(a);
+
+    // Pointers:
+    int b = 5;
+
+    // this code won't compile without unsafe option
+    unsafe
+    {
+      int* p = &b;
+      Console.WriteLine(*p);
+
+      *p += 1;
+      Console.WriteLine(*p);
+    }
+
+    Console.ReadKey();
+  }
+}
+```
+
+output
+
+```bash
+Max
+False
+True
+1
+2
+5
+6
+```
+
+#### Go: pointers
+
+```go
+package main
+
+import "fmt"
+
+func valTest(v int) {
+	v = 5
+}
+
+func pointerTest(v *int) {
+	// pointer dereferencing
+	*v = 5
+}
+
+type Cat struct{ name string }
+
+// value receiver doesn't mutate state
+func (c Cat) valReceiverTest() {
+	c.name = "Max"
+}
+
+// pointer receiver mutates state
+func (c *Cat) pointerReceiverTest() {
+	c.name = "Max"
+}
+
+func main() {
+
+	a := 2
+
+	// passing variables by value copies the value.
+	valTest(a)
+	fmt.Println(a)
+
+	// &a: address operator, generates a pointer to a
+	pointerTest(&a)
+
+	fmt.Println(a)
+
+	c := Cat{name: "Kitty"}
+	// passes copy of c to valReceiverTest method
+	c.valReceiverTest()
+	fmt.Println(c.name)
+
+	// passes address of c to pointerReceiverTest method
+	c.pointerReceiverTest()
+	fmt.Println(c.name)
+}
+```
+
+output
+
+```bash
+2
+5
+Kitty
+Max
 ```
