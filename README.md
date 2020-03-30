@@ -9,6 +9,8 @@
 
 This tutorial is intended to help developers learn Go coming from a C# development background and vice versa.
 
+Code examples are availaleble in [examples/](examples/)
+
 ## Contents
 
 - [Comments](#comments)
