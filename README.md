@@ -46,6 +46,7 @@ This tutorial is intended to help developers learn Go coming from a C# developme
   - [finally](#cleanup)
   - [defer](#gocleanup)
 - [Inheritance](#inheritance)
+- [Poly­mor­phism](#polmorphism)
 
 <h3 id=comments>🔶 Comments</h3>
 
@@ -1105,7 +1106,7 @@ type Drawable interface {
 }
 
 type Shape interface {
-	getArea() float64
+	Area() float64
 }
 
 type Point struct {
@@ -1122,7 +1123,7 @@ type Circle struct {
 }
 
 // This method means type Circle implements the interface Shape
-func (c Circle) getArea() float64 {
+func (c Circle) Area() float64 {
 	return math.Pi * c.radius * c.radius
 }
 
@@ -1130,12 +1131,12 @@ func (c Circle) draw() {
 	fmt.Println("Drawing circle")
 }
 
-func (s Square) getArea() float64 {
+func (s Square) Area() float64 {
 	return s.side * s.side
 }
 
 func printArea(s Shape) {
-	fmt.Println(s.getArea())
+	fmt.Println(s.Area())
 }
 
 func main() {
@@ -2382,4 +2383,71 @@ name: Max, age: 3
 Max is sleeping
 name: Kitty, age: 2
 Kitty is sleeping
+```
+
+<h3 id=poly­mor­phism>🔶 Poly­mor­phism</h3>
+
+---
+
+#### C&#35;
+
+- Compile-time or static poly­mor­phism:
+  - method/operator overloading.
+- Runtime poly­mor­phism:
+  - method overriding through inheritance.
+
+◾ A polymorphic behavior can be achieved by using features like
+variance (covariance and contravariance)
+
+#### Go
+
+A polymorphic behavior can be achieved by using interfaces.
+
+```go
+package main
+
+import (
+	"fmt"
+	"math"
+	"reflect"
+)
+
+type Shape interface {
+	Area() float64
+}
+
+type Square struct {
+	side float64
+}
+
+type Circle struct {
+	radius float64
+}
+
+func (c Circle) Area() float64 {
+	return math.Pi * c.radius * c.radius
+}
+
+func (s Square) Area() float64 {
+	return s.side * s.side
+}
+
+func displayArea(shape Shape) {
+	fmt.Printf("area of %v is %v\n", reflect.TypeOf(shape).Name(), shape.Area())
+}
+
+func main() {
+
+	shapes := []Shape{Square{3}, Circle{3}}
+	for _, v := range shapes {
+		displayArea(v)
+	}
+}
+```
+
+output
+
+```bash
+area of Square is 9
+area of Circle is 28.274333882308138
 ```

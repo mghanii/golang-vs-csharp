@@ -10,7 +10,7 @@ type Drawable interface {
 }
 
 type Shape interface {
-	getArea() float64
+	Area() float64
 }
 
 type Point struct {
@@ -27,7 +27,7 @@ type Circle struct {
 }
 
 // This method means type Circle implements the interface Shape
-func (c Circle) getArea() float64 {
+func (c Circle) Area() float64 {
 	return math.Pi * c.radius * c.radius
 }
 
@@ -35,12 +35,12 @@ func (c Circle) draw() {
 	fmt.Println("Drawing circle")
 }
 
-func (s Square) getArea() float64 {
+func (s Square) Area() float64 {
 	return s.side * s.side
 }
 
 func printArea(s Shape) {
-	fmt.Println(s.getArea())
+	fmt.Println(s.Area())
 }
 
 func main() {
