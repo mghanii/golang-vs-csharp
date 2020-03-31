@@ -24,6 +24,9 @@ Code examples are availaleble in [examples/](examples/)
   - [Class](#Class)
   - [Struct](#Struct)
   - [Interface](#interface)
+- [Object vs interface{}](#objectinterface)
+  - [object(C#)](#objectinterface)
+  - [interface{}(Go)](#goemptyinterface)
 - [Type checking](#typechecking)
 - [Type conversion](#typeconversion)
 - [Functions](#functions)
@@ -50,6 +53,9 @@ Code examples are availaleble in [examples/](examples/)
 - [Inheritance](#inheritance)
 - [Polymorphism](#polymorphism)
 - [Pointers](#pointers)
+- [Concurrency](#concurrency)
+  - [async/await(C#)](#concurrency)
+  - [goroutines/channels(Go)](#goconcurrency)
 
 <h3 id=comments>🔶 Comments</h3>
 
@@ -1155,6 +1161,59 @@ func main() {
 }
 ```
 
+<h3 id=objectinterface>🔶 Object vs interface{}</h3>
+
+---
+
+#### C&#35;
+
+Every type in C# derives from object class, so a variable of type object can point to data of any type.
+
+```cs
+ object[] arr = new object[]
+    {
+            44,
+            4.5,
+            "string",
+            DateTime.Now,
+            true,
+            new int[]{1,2,3}
+    };
+```
+
+<h3 id=goemptyinterface>Go: interface{}</h3>
+
+- Empty interface is just an interface defined on the fly that has no methods on it.
+
+- Every type in Go implements the empty interface, so a variable of type interface{} can store data of any type.
+
+```go
+package main
+
+import (
+	"fmt"
+	"reflect"
+	"time"
+)
+
+func main() {
+
+	arr := []interface{}{
+		44,
+		4.5,
+		"string",
+		time.Now(),
+		true,
+		'a',
+		[]int{1, 2, 3},
+	}
+	for _, v := range arr {
+		fmt.Println(reflect.TypeOf(v))
+	}
+
+}
+```
+
 <h3 id=typechecking>🔶 Type checking</h3>
 
 ---
@@ -1406,14 +1465,14 @@ package main
 
 import "fmt"
 
-// this method can be called with variable number of arguments
+// variadic function: accepts a variable number of arguments
 func sum(values ...int) (result int) {
 
 	for _, v := range values {
 		result += v
 	}
 
-	return
+	return // result is a named return value
 }
 
 func transform(transformer func(v int) int, value int) int {
@@ -2467,7 +2526,7 @@ When you pass a variable to a method:
 - if it's reference type, you pass a copy of reference to the object.
 - ref keyword is used to pass variable by reference.
 
-- C# does not support pointer arithmetic, by default.
+- By default, C# does not support pointer arithmetic.
 - Pointers can be used only inside an unsafe context, using unsafe keword.
 
 ```cs
@@ -2609,4 +2668,153 @@ output
 5
 Kitty
 Max
+```
+
+<h3 id=concurrency>🔶 Concurrency</h3>
+
+---
+
+#### C&#35;
+
+```cs
+using System;
+using System.Net.Http;
+using System.Threading;
+using System.Threading.Tasks;
+using Newtonsoft.Json;
+
+internal class Program
+{
+  private class QuoteEntity
+  {
+    public string Quote { get; set; }
+    public string Author { get; set; }
+  }
+
+  private static void DisplayQuote(QuoteEntity quote) =>
+      Console.WriteLine($"quote: {quote.Quote}\nauthor: {quote.Author}\n");
+
+  private static async Task<QuoteEntity> GetRandomQuoteAsync()
+  {
+    var path = "http://quotes.stormconsultancy.co.uk/random.json";
+
+    var json = await new HttpClient().GetStringAsync(path);
+
+    return JsonConvert.DeserializeObject<QuoteEntity>(json);
+  }
+
+  private static async Task Main(string[] args)
+  {
+    // Multithreading: using multiple threads.
+    // C# has high-level features that abstracts a way the concept of threads,
+    // so mostly, we don't need to create a thread using new keyword.
+    var t1 = new Thread(() => Console.WriteLine("Thread 1"));
+    t1.Start();
+    t1.Join();
+
+    // Asynchronous programming
+
+    var quote = await GetRandomQuoteAsync();
+    DisplayQuote(quote);
+
+    var task = Task.Run(GetRandomQuoteAsync);
+    quote = await task;
+    DisplayQuote(quote);
+
+    // Waiting for many tasks to complete
+    var tasks = new Task<QuoteEntity>[] {
+            GetRandomQuoteAsync(),
+            GetRandomQuoteAsync()
+        };
+
+    var quotes = await Task.WhenAll(tasks);
+
+    foreach (var q in quotes)
+      DisplayQuote(q);
+
+    Console.ReadKey();
+  }
+}
+```
+
+<h4 id=goconcurrency>Go: concurrency</h4>
+
+- Goroutine is a function that is capable of running concurrently with other functions.
+- Channel is a pipeline for sending and receiving data.
+- Channels provide a way for one goroutine to send structured data to another.
+- By default, Go uses CPU threads equal to available cores.
+
+```go
+package main
+
+import (
+	"encoding/json"
+	"fmt"
+	"io/ioutil"
+	"log"
+	"net/http"
+	"sync"
+)
+
+type Quote struct {
+	Quote  string `json:"quote"`
+	Author string `json:"author"`
+}
+
+func parseBody(r *http.Response, x interface{}) {
+	defer r.Body.Close()
+	if body, err := ioutil.ReadAll(r.Body); err == nil {
+		if err := json.Unmarshal(body, x); err != nil {
+			log.Fatal(err)
+			return
+		}
+	} else {
+		log.Fatal(err)
+	}
+}
+
+func getRandomQuote() Quote {
+	res, err := http.Get("http://quotes.stormconsultancy.co.uk/random.json")
+	if err != nil {
+		log.Fatal(err)
+	}
+	q := Quote{}
+	parseBody(res, &q)
+
+	return q
+}
+
+func displayQuotes(ch <-chan Quote) {
+	for {
+		select {
+		case quote := <-ch:
+			fmt.Printf("%+v\n", quote)
+		case <-doneCh:
+			break
+		}
+	}
+}
+
+var doneCh = make(chan struct{})
+
+func main() {
+	quotesCount := 5
+	quotesCh := make(chan Quote, quotesCount)
+	wg := sync.WaitGroup{}
+
+	go displayQuotes(quotesCh)
+
+	// get random quotes
+	wg.Add(quotesCount)
+	for i := 0; i < quotesCount; i++ {
+		go func(ch chan<- Quote) {
+			defer wg.Done()
+			quote := getRandomQuote()
+			ch <- quote
+		}(quotesCh)
+	}
+
+	wg.Wait()
+	doneCh <- struct{}{}
+}
 ```

@@ -2,14 +2,14 @@ package main
 
 import "fmt"
 
-// this method can be called with variable number of arguments
+// variadic function: accepts a variable number of arguments
 func sum(values ...int) (result int) {
 
 	for _, v := range values {
 		result += v
 	}
 
-	return
+	return // result is a named return value
 }
 
 func transform(transformer func(v int) int, value int) int {
