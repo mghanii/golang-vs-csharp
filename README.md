@@ -2706,7 +2706,7 @@ internal class Program
   private static async Task Main(string[] args)
   {
     // Multithreading: using multiple threads.
-    // C# has high-level features that abstracts a way the concept of threads,
+    // C# has a high-level features that abstracts a way the concept of threads,
     // so mostly, we don't need to create a thread using new keyword.
     var t1 = new Thread(() => Console.WriteLine("Thread 1"));
     t1.Start();
