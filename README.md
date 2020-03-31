@@ -2763,12 +2763,13 @@ type Quote struct {
 
 func parseBody(r *http.Response, x interface{}) {
 	defer r.Body.Close()
-	if body, err := ioutil.ReadAll(r.Body); err == nil {
-		if err := json.Unmarshal(body, x); err != nil {
-			log.Fatal(err)
-			return
-		}
-	} else {
+	body, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		log.Fatal(err)
+		return
+	}
+
+	if err = json.Unmarshal(body, x); err != nil {
 		log.Fatal(err)
 	}
 }
