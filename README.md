@@ -59,6 +59,7 @@ Code examples are availaleble in [examples/](examples/)
 - [Synchronization](#synchronization)
   - [Mutex](#csmutex)
   - [Atomic operations](#atomicoperations)
+- [Sorting](#sorting)
 
 <h3 id=comments>🔶 Comments</h3>
 
@@ -2928,12 +2929,11 @@ func main() {
 	}
 
 	wg.Wait()
-	fmt.Println(sc.Counter)
+  fmt.Println(sc.Counter)
 
-	// RWMutex: a reader/writer mutual exclusion lock.
+  	// RWMutex: a reader/writer mutual exclusion lock.
 	// The lock can be held by an arbitrary number of readers or a single writer.
 	_ := sync.RWMutex{}
-
 }
 ```
 
@@ -3010,4 +3010,140 @@ func main() {
 
 	fmt.Println(sc.Counter == 50*1000) // true
 }
+```
+
+<h3 id=sorting>🔶 Sorting</h3>
+
+---
+
+#### C&#35;
+
+```cs
+using System;
+using System.Linq;
+
+class Cat : IComparable<Cat>
+{
+  public string Name { get; set; }
+  public int Age { get; set; }
+
+  public Cat(string name, int age)
+  {
+    Name = name;
+    Age = age;
+  }
+
+  public override string ToString() => $"{Name}-{Age} ";
+
+  public int CompareTo(Cat other)
+  {
+    // sort by age
+    return Age.CompareTo(other.Age);
+  }
+}
+
+static class Program
+{
+  static void Main(string[] args)
+  {
+    // Sort array in ascending order
+    var arr1 = new[] { 5, 2, 9, -2, 0, 4 };
+    Array.Sort(arr1);
+    arr1.Dump();
+
+    // Sort array in descending order
+    var arr2 = new[] { 5, 2, 9, -2, 0, 4 };
+    Array.Sort(arr2, (v1, v2) => v2 - v1);
+    arr2.Dump();
+
+    // Sort using LINQ
+    var arr3 = new[] { "D", "A", "E", "B", "C" };
+    arr3 = arr3.OrderBy(v => v).ToArray();
+    arr3.Dump();
+
+    // Sort custom objects
+    var arr4 = new[]{
+            new Cat("Max",4),
+            new Cat("Kitty",2),
+            new Cat("Max",1)
+        };
+    Array.Sort(arr4); // sorted asc by age
+    arr4.Dump();
+  }
+
+  static void Dump<T>(this T[] arr)
+  {
+    foreach (var v in arr)
+      Console.Write(v + " ");
+
+    Console.Write("\n");
+  }
+}
+```
+
+output
+
+```bash
+-2 0 2 4 5 9
+9 5 4 2 0 -2
+A B C D E
+Max-1  Kitty-2  Max-4
+```
+
+#### Go
+
+```go
+package main
+
+import (
+	"fmt"
+	"sort"
+)
+
+type Cat struct {
+	Name string
+	Age  int
+}
+
+// implements sort.Interface
+type ByAge []Cat
+
+func (c ByAge) Len() int           { return len(c) }
+func (c ByAge) Less(i, j int) bool { return c[i].Age < c[j].Age }
+func (c ByAge) Swap(i, j int)      { c[i], c[j] = c[j], c[i] }
+
+func main() {
+	// Sort in ascending order
+	arr1 := []int{5, 2, 9, -2, 0, 4}
+	sort.Ints(arr1)
+	fmt.Println(arr1)
+
+	// Sort slice in descending order
+	arr2 := []int{5, 2, 9, -2, 0, 4}
+	sort.Sort(sort.Reverse(sort.IntSlice(arr2)))
+	fmt.Println(arr2)
+
+	// Sort strings
+	arr3 := []string{"D", "A", "E", "B", "C"}
+	sort.Strings(arr3)
+	fmt.Println(arr3)
+
+	// Sort custom objects
+	arr4 := []Cat{
+		Cat{"Max", 4},
+		Cat{"Kitty", 2},
+		Cat{"Max", 1},
+	}
+	sort.Sort(ByAge(arr4))
+	fmt.Println(arr4)
+}
+```
+
+output
+
+```bash
+[-2 0 2 4 5 9]
+[9 5 4 2 0 -2]
+[A B C D E]
+[{Max 1} {Kitty 2} {Max 4}]
 ```
