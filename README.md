@@ -43,7 +43,7 @@ Code examples are availaleble in [examples/](examples/)
 - [While](#while)
 - [Closures](#Closures)
 - [Error handling](#errorhandling)
-  - [try/catch (C#)](#errorhandling)
+  - [try / catch (C#)](#errorhandling)
   - [exceptions (C#)](#errorhandling)
   - [errors](#goerrors)
 - [throw / panic](#throwpanic)
@@ -54,8 +54,11 @@ Code examples are availaleble in [examples/](examples/)
 - [Polymorphism](#polymorphism)
 - [Pointers](#pointers)
 - [Concurrency](#concurrency)
-  - [async/await(C#)](#concurrency)
-  - [goroutines/channels(Go)](#goconcurrency)
+  - [async / await(C#)](#concurrency)
+  - [goroutines / channels(Go)](#goconcurrency)
+- [Synchronization](#synchronization)
+  - [Mutex](#csmutex)
+  - [Atomic operations](#atomicoperations)
 
 <h3 id=comments>🔶 Comments</h3>
 
@@ -2800,7 +2803,9 @@ var doneCh = make(chan struct{})
 
 func main() {
 	quotesCount := 5
-	quotesCh := make(chan Quote, quotesCount)
+  quotesCh := make(chan Quote, quotesCount)
+  // WaitGroup is similar to C#'s Task.WhenAll,
+  // used to wait for multiple goroutines to finish
 	wg := sync.WaitGroup{}
 
 	go displayQuotes(quotesCh)
@@ -2817,5 +2822,191 @@ func main() {
 
 	wg.Wait()
 	doneCh <- struct{}{}
+}
+```
+
+<h3 id=synchronization>🔶 Synchronization</h3>
+
+---
+
+<h4 id=csmutex> Mutex</h4>
+
+#### C&#35;
+
+Grants exclusive access to a shared resource, can be used for interprocess synchronization.
+
+```cs
+using System;
+using System.Threading;
+
+class Program
+{
+  private static readonly Mutex mutex = new Mutex();
+
+  static void DoSomething()
+  {
+    // Wait until it is safe to enter.
+    mutex.WaitOne();
+    Console.WriteLine($"{Thread.CurrentThread.Name} has entered in the protected area");
+
+    // Waits 1 second
+    Thread.Sleep(TimeSpan.FromSeconds(1));
+
+    Console.WriteLine($"{Thread.CurrentThread.Name} is leaving the protected area\r\n");
+    // Release the mutex
+    mutex.ReleaseMutex();
+  }
+
+  static void Main(string[] args)
+  {
+    for (int i = 0; i < 4; i++)
+      new Thread(new ThreadStart(DoSomething))
+      {
+        Name = $"Thread{i + 1}"
+      }
+      .Start();
+  }
+}
+```
+
+output: note that threads can execute in different order for each run
+
+```bash
+Thread2 has entered in the protected area
+Thread2 is leaving the protected area
+
+Thread4 has entered in the protected area
+Thread4 is leaving the protected area
+
+Thread1 has entered in the protected area
+Thread1 is leaving the protected area
+
+Thread3 has entered in the protected area
+Thread3 is leaving the protected area
+```
+
+<h4 id=gomutex> Go: mutex</h4>
+
+Mutex is used to safely access data across multiple goroutines.
+
+```go
+package main
+
+import (
+	"fmt"
+	"sync"
+)
+
+type SafeCounter struct {
+	mutex   sync.Mutex
+	Counter int
+}
+
+func (c *SafeCounter) Increment() {
+	c.mutex.Lock()
+	c.Counter++
+	c.mutex.Unlock()
+}
+
+func (c *SafeCounter) Reset() {
+	// we don't need the lock since assignment is atomic.
+	c.Counter = 0
+}
+
+func main() {
+	wg := sync.WaitGroup{}
+	wg.Add(50)
+
+	sc := SafeCounter{}
+	for i := 0; i < 50; i++ {
+		go func() {
+			for c := 0; c < 1000; c++ {
+				sc.Increment()
+			}
+			wg.Done()
+		}()
+	}
+
+	wg.Wait()
+  fmt.Println(sc.Counter)
+
+  	// RWMutex: a reader/writer mutual exclusion lock.
+	// The lock can be held by an arbitrary number of readers or a single writer.
+	_ := sync.RWMutex{}
+}
+```
+
+output
+
+```bash
+50000
+```
+
+<h3 id=atomicoperations> Atomic operations</h3>
+
+---
+
+#### C&#35;
+
+[System.Threading.Interlocked](https://docs.microsoft.com/en-us/dotnet/api/system.threading.interlocked?view=netcore-3.1) class provides atomic operations for variables that are shared by multiple threads.
+
+```cs
+/// <summary>
+/// Thread safe Id generator
+/// </summary>
+class IdGenerator
+{
+    private static int _lastId;
+
+    // returns a new id with a unique value
+    public static int GetNextId()
+    {
+        return Interlocked.Increment(ref _lastId);
+    }
+}
+```
+
+#### Go
+
+```go
+package main
+
+import (
+	"fmt"
+	"sync"
+	"sync/atomic"
+)
+
+type SafeCounter struct {
+	Counter int64
+}
+
+func (c *SafeCounter) Increment() {
+	atomic.AddInt64(&c.Counter, 1)
+}
+
+func (c *SafeCounter) Reset() {
+	c.Counter = 0
+}
+
+func main() {
+
+	sc := SafeCounter{}
+	wg := sync.WaitGroup{}
+
+	wg.Add(50)
+	for i := 0; i < 50; i++ {
+		go func() {
+			for c := 0; c < 1000; c++ {
+
+				sc.Increment()
+			}
+			wg.Done()
+		}()
+	}
+
+	wg.Wait()
+
+	fmt.Println(sc.Counter == 50*1000) // true
 }
 ```

@@ -54,6 +54,9 @@ var doneCh = make(chan struct{})
 func main() {
 	quotesCount := 5
 	quotesCh := make(chan Quote, quotesCount)
+
+	// WaitGroup is similar to C#'s Task.WhenAll,
+	// used to wait for multiple goroutines to finish
 	wg := sync.WaitGroup{}
 
 	go displayQuotes(quotesCh)
