@@ -59,6 +59,7 @@ Code examples are availaleble in [examples/](examples/)
 - [Synchronization](#synchronization)
   - [Mutex](#csmutex)
   - [Atomic operations](#atomicoperations)
+- [Generics](#generics)
 - [Sorting](#sorting)
 - [Swapping](#swapping)
 
@@ -3013,6 +3014,73 @@ func main() {
 }
 ```
 
+<h3 id=generics>🔶 Generics</h3>
+
+---
+
+#### C&#35;
+
+```cs
+using System;
+// generic stack
+class Stack<T>
+{
+  public int Count { get; private set; }
+  public int Capacity { get; private set; }
+  private T[] _items = new T[0];
+
+  public Stack() { }
+  public Stack(int capacity) => Capacity = capacity;
+
+  public void Push(T value)
+  {
+    if (_items.Length == Count) _items = IncreaseCapacity(_items, Count);
+    _items[Count++] = value;
+  }
+
+  public T Peek()
+  {
+    if (Count == 0) throw new InvalidOperationException("The stack is empty");
+    return _items[Count - 1];
+  }
+
+  public T Pop()
+  {
+    if (Count == 0) throw new InvalidOperationException("The stack is empty");
+    var item = _items[--Count];
+    _items[Count] = default;
+    return item;
+  }
+
+  private T[] IncreaseCapacity(T[] array, int currentCapacity)
+  {
+    Capacity = currentCapacity == 0 ? 4 : currentCapacity * 2;
+    var arr = new T[Capacity];
+    if (currentCapacity != 0) Array.Copy(array, arr, array.Length);
+    return arr;
+  }
+}
+
+class Program
+{
+  static void Main(string[] args)
+  {
+    var intStack = new Stack<int>();
+    var stringStack = new Stack<string>();
+  }
+}
+```
+
+#### Go
+
+- Go doesn't have generics.
+- However, you can instantiate an array, slice or map with an arbitrary element types.
+
+```go
+ints := []int{1, 2, 3, 4}
+strings := []string{"A", "B", "C"}
+```
+
 <h3 id=sorting>🔶 Sorting</h3>
 
 ---
@@ -3188,7 +3256,6 @@ class Program
     var b = 5;
     Swap(ref a, ref b);
     Console.WriteLine($"{a} {b}"); // 5 3
-    Console.ReadKey();
   }
 }
 ```
