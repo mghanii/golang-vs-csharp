@@ -11,11 +11,20 @@ type Cat struct {
 }
 
 // implements sort.Interface.
-type ByAge []Cat
+type ByAgeThenName []Cat
 
-func (c ByAge) Len() int           { return len(c) }
-func (c ByAge) Less(i, j int) bool { return c[i].Age < c[j].Age }
-func (c ByAge) Swap(i, j int)      { c[i], c[j] = c[j], c[i] }
+func (c ByAgeThenName) Len() int { return len(c) }
+func (c ByAgeThenName) Less(i, j int) bool {
+	if c[i].Age < c[j].Age {
+		return true
+	}
+	if c[i].Age > c[j].Age {
+		return false
+	}
+	return c[i].Name < c[j].Name
+
+}
+func (c ByAgeThenName) Swap(i, j int) { c[i], c[j] = c[j], c[i] }
 
 func main() {
 	// Sort in ascending order
@@ -36,10 +45,11 @@ func main() {
 	// Sort custom objects
 	arr4 := []Cat{
 		Cat{"Max", 4},
-		Cat{"Kitty", 2},
-		Cat{"Max", 1},
+		Cat{"Max", 3},
+		Cat{"Angel", 1},
+		Cat{"Kitty", 3},
 	}
-	sort.Sort(ByAge(arr4))
+	sort.Sort(ByAgeThenName(arr4)) // sort by Age then Name
 	fmt.Println(arr4)
 
 }

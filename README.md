@@ -3037,8 +3037,10 @@ class Cat : IComparable<Cat>
 
   public int CompareTo(Cat other)
   {
-    // sort by age
-    return Age.CompareTo(other.Age);
+    // sort by age then name
+    var result = Age.CompareTo(other.Age);
+    if (result == 0) result = Name.CompareTo(other.Name);
+    return result;
   }
 }
 
@@ -3061,14 +3063,17 @@ static class Program
     arr3 = arr3.OrderBy(v => v).ToArray();
     arr3.Dump();
 
-    // Sort custom objects
+    // Sort composite objects
     var arr4 = new[]{
             new Cat("Max",4),
-            new Cat("Kitty",2),
-            new Cat("Max",1)
+            new Cat("Max",3),
+            new Cat("Angel",1),
+            new Cat("Kitty",3),
         };
-    Array.Sort(arr4); // sorted asc by age
+    Array.Sort(arr4); // sort by name then age
     arr4.Dump();
+
+    Console.ReadKey();
   }
 
   static void Dump<T>(this T[] arr)
@@ -3087,7 +3092,7 @@ output
 -2 0 2 4 5 9
 9 5 4 2 0 -2
 A B C D E
-Max-1  Kitty-2  Max-4
+Angel-1  Kitty-3  Max-3  Max-4
 ```
 
 #### Go
@@ -3105,12 +3110,21 @@ type Cat struct {
 	Age  int
 }
 
-// implements sort.Interface
-type ByAge []Cat
+// implements sort.Interface.
+type ByAgeThenName []Cat
 
-func (c ByAge) Len() int           { return len(c) }
-func (c ByAge) Less(i, j int) bool { return c[i].Age < c[j].Age }
-func (c ByAge) Swap(i, j int)      { c[i], c[j] = c[j], c[i] }
+func (c ByAgeThenName) Len() int { return len(c) }
+func (c ByAgeThenName) Less(i, j int) bool {
+	if c[i].Age < c[j].Age {
+		return true
+	}
+	if c[i].Age > c[j].Age {
+		return false
+	}
+	return c[i].Name < c[j].Name
+
+}
+func (c ByAgeThenName) Swap(i, j int) { c[i], c[j] = c[j], c[i] }
 
 func main() {
 	// Sort in ascending order
@@ -3131,10 +3145,11 @@ func main() {
 	// Sort custom objects
 	arr4 := []Cat{
 		Cat{"Max", 4},
-		Cat{"Kitty", 2},
-		Cat{"Max", 1},
+		Cat{"Max", 3},
+		Cat{"Angel", 1},
+		Cat{"Kitty", 3},
 	}
-	sort.Sort(ByAge(arr4))
+	sort.Sort(ByAgeThenName(arr4)) // sort by Age then Name
 	fmt.Println(arr4)
 }
 ```
@@ -3145,5 +3160,5 @@ output
 [-2 0 2 4 5 9]
 [9 5 4 2 0 -2]
 [A B C D E]
-[{Max 1} {Kitty 2} {Max 4}]
+[{Angel 1} {Kitty 3} {Max 3} {Max 4}]
 ```
