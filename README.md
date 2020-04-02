@@ -62,6 +62,7 @@ Code examples are availaleble in [examples/](examples/)
 - [Generics](#generics)
 - [Sorting](#sorting)
 - [Swapping](#swapping)
+- [Timeout](#timeout)
 
 <h3 id=comments>🔶 Comments</h3>
 
@@ -3275,4 +3276,104 @@ func main() {
 
 	fmt.Println(a, b) // 5 3
 }
+```
+
+<h3 id=timeout>🔶 Timeout</h3>
+
+---
+
+#### C&#35;
+
+```cs
+using System;
+using System.Threading;
+using System.Threading.Tasks;
+
+class Program
+{
+  static async Task DoSomethingAsync()
+  {
+    await Task.Delay(TimeSpan.FromSeconds(3));
+    Console.WriteLine("DoSomethingAsync is done.");
+  }
+
+  static async Task TrySomethingAsync(TimeSpan timeout)
+  {
+    var cts = new CancellationTokenSource();
+    cts.CancelAfter(timeout);
+
+    for (int i = 0; i < 100; i++)
+    {
+      cts.Token.ThrowIfCancellationRequested();
+
+      // Simulate some work
+      await Task.Delay(TimeSpan.FromSeconds(1));
+    }
+  }
+
+  static async Task Main(string[] args)
+  {
+    // 1. Implementing timeout using Task.WhenAny:
+    var timeoutTask = Task.Delay(TimeSpan.FromSeconds(2));
+    var completedTask = await Task.WhenAny(timeoutTask, DoSomethingAsync());
+
+    if (completedTask == timeoutTask)
+      // 📝 DoSomethingAsync isn't cancelled, we just won't wait for it to complete.
+      Console.WriteLine("DoSomethingAsync is timed out");
+
+    // 2. Implementing timeout using cancellation tokens:
+    try
+    {
+      await TrySomethingAsync(TimeSpan.FromSeconds(2));
+      Console.WriteLine("TrySomethingAsync finished without cancelling.");
+    }
+    catch (OperationCanceledException)
+    {
+      Console.WriteLine("TrySomethingAsync is cancelled.");
+    }
+  }
+}
+```
+
+output
+
+```bash
+DoSomethingAsync is timedout
+DoSomethingAsync is done.
+Task is cancelled.
+```
+
+#### Go
+
+```go
+package main
+
+import (
+	"fmt"
+	"time"
+)
+
+func main() {
+
+  ch := make(chan string, 1)
+
+	go func() {
+		// Simulate some work.
+		time.Sleep(2 * time.Second)
+		ch <- "done"
+	}()
+
+	select {
+	case res := <-ch:
+		fmt.Println(res)
+	case <-time.After(1 * time.Second):
+		fmt.Println("timed out")
+	}
+}
+```
+
+output
+
+```bash
+timed out
 ```
