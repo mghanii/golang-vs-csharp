@@ -59,6 +59,7 @@ Code examples are availaleble in [examples/](examples/)
 - [Synchronization](#synchronization)
   - [Mutex](#csmutex)
   - [Atomic operations](#atomicoperations)
+- [Worker pools](#workerpool)
 - [Generics](#generics)
 - [Sorting](#sorting)
 - [Swapping](#swapping)
@@ -3013,6 +3014,71 @@ func main() {
 
 	fmt.Println(sc.Counter == 50*1000) // true
 }
+```
+
+<h3 id=workerpool>🔶 Worker pools</h3>
+
+---
+
+#### C&#35;
+
+C# has a [Threadpool](https://docs.microsoft.com/en-us/dotnet/api/system.threading.threadpool?view=netcore-3.1) class.
+
+#### Go:
+
+```go
+package main
+
+import (
+	"fmt"
+	"runtime"
+	"sync"
+	"time"
+)
+
+func worker(id int, taskQueue <-chan func(w int)) {
+	for fun := range taskQueue {
+		fun(id)
+	}
+}
+
+func main() {
+
+	maxWorkers := runtime.GOMAXPROCS(0)
+	taskQueue := make(chan func(w int), 1)
+	wg := sync.WaitGroup{}
+
+	wg.Add(maxWorkers)
+	for w := 1; w <= maxWorkers; w++ {
+		go func(id int) {
+			worker(id, taskQueue)
+			wg.Done()
+		}(w)
+	}
+
+	for i := 1; i <= 7; i++ {
+		t := i
+		taskQueue <- func(w int) {
+			fmt.Printf("Worker # %v is executing task # %v\n", w, t)
+			time.Sleep(time.Second * 2)
+		}
+	}
+
+	close(taskQueue)
+	wg.Wait()
+}
+```
+
+output looks similar to the following if executed in a 4 core CPU:
+
+```bash
+Worker # 3 is executing task # 3
+Worker # 2 is executing task # 2
+Worker # 4 is executing task # 4
+Worker # 1 is executing task # 1
+Worker # 3 is executing task # 5
+Worker # 2 is executing task # 6
+Worker # 4 is executing task # 7
 ```
 
 <h3 id=generics>🔶 Generics</h3>
