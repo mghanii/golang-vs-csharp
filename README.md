@@ -3630,7 +3630,12 @@ func main() {
 
 	w(dt.Unix()) // 1585854940
 
-	zone, offset := dt.Zone() // UTC
-	w(zone, offset)           // 0
+	str := "2020-04-02T19:15:40+00:00"
+	layout := "2006-01-02T15:04:05Z07:00"
+	dt3, _ := time.Parse(layout, str)
+	w(dt3.String()) // 2020-04-02 19:15:40 +0000 +0000
+
+	zone, offset := dt.Zone()
+	w(zone, offset) // UTC 0
 }
 ```
