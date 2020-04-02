@@ -40,6 +40,7 @@ Code examples are availaleble in [examples/](examples/)
 - [For](#for)
   - [foreach (C#)](#for)
   - [for range (Go)](#gofor)
+- [Iterator](#iterator)
 - [While](#while)
 - [Closures](#Closures)
 - [Error handling](#errorhandling)
@@ -1936,6 +1937,96 @@ output
 2 4 8 16 32
 1 2 3 4 5
 1 2 3 4 5
+```
+
+<h3 id=iterator>🔶 Iterator</h3>
+
+---
+
+#### C&#35;
+
+```cs
+using System;
+using System.Collections.Generic;
+
+class Program
+{
+  static IEnumerable<int> Where(IEnumerable<int> values, Func<int, bool> predicate)
+  {
+    foreach (var v in values)
+    {
+      if (predicate(v))
+        yield return v;
+    }
+  }
+
+  static void Main(string[] args)
+  {
+    var values = new[] { 1, 2, 3, 4, 5, 6 };
+    var odds = Where(values, v => v % 2 == 1);
+
+    foreach (var v in odds)
+      Console.Write(v + ", ");
+
+    Console.ReadKey();
+  }
+}
+```
+
+output
+
+```bash
+1, 3, 5,
+```
+
+#### Go: iterator
+
+```go
+package main
+
+import (
+	"fmt"
+	"reflect"
+)
+
+type Iterator func() (item interface{}, ok bool)
+
+func Iterate(collection interface{}) Iterator {
+
+	source := reflect.ValueOf(collection)
+	len := source.Len()
+	i := 0
+
+	if source.Kind() != reflect.Slice && source.Kind() != reflect.Array {
+		panic("can't iterate over non-slice or array types")
+	}
+
+	return func() (item interface{}, ok bool) {
+		ok = i < len
+		if ok {
+			item = source.Index(i).Interface()
+			i++
+		}
+
+		return
+	}
+}
+
+func main() {
+	a := []int{1, 2, 3, 4, 5}
+
+	var next Iterator = Iterate(a)
+
+	for item, ok := next(); ok; item, ok = next() {
+		fmt.Print(item, ", ")
+	}
+}
+```
+
+output
+
+```bash
+1, 2, 3, 4, 5,
 ```
 
  <h3 id=while>🔶 while</h3>
