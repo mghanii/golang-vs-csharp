@@ -24,6 +24,7 @@ Code examples are availaleble in [examples/](examples/)
   - [Class](#Class)
   - [Struct](#Struct)
   - [Interface](#interface)
+  - [Enum](#enum)
 - [Object vs interface{}](#objectinterface)
   - [object(C#)](#objectinterface)
   - [interface{}(Go)](#goemptyinterface)
@@ -1169,6 +1170,97 @@ func main() {
 
 	var d Drawable = c
 	d.draw() // Drawing circle
+}
+```
+
+### Enum
+
+---
+
+#### C&#35;
+
+```cs
+using System;
+
+enum LogLevel
+{
+  Trace = 1,
+  Debug,
+  Information,
+  Error,
+  Warning
+}
+
+[Flags]
+enum Border
+{
+  Top,
+  Right,
+  Bottom,
+  Left
+}
+
+class Program
+{
+  static void Main(string[] args)
+  {
+    var level = LogLevel.Information;
+    Console.WriteLine(level);       // Information
+    Console.WriteLine((int)level);  // 3
+    Console.WriteLine((LogLevel)1); // Trace
+
+    var border = Border.Bottom | Border.Left;
+
+    // Checks if left border has set
+    Console.WriteLine((border & Border.Left) == Border.Left); // true
+
+    // Removes left border
+    border &= ~Border.Left;
+    Console.WriteLine((border & Border.Left) == Border.Left); // false
+
+    Console.ReadKey();
+  }
+}
+```
+
+#### Go: enum
+
+```go
+package main
+
+import "fmt"
+
+type LogLevel uint8
+type Border uint8
+
+const (
+	Trace LogLevel = iota + 1
+	Debug
+	Information
+	Error
+	Warning
+)
+const (
+	Top    Border = 1 // 1 << iota
+	Right         = 2
+	Bottom        = 4
+	Left          = 8
+)
+
+func main() {
+	level := Information
+	fmt.Println(level)            // 3
+	fmt.Println(Information == 3) // true
+
+	border := Bottom | Left
+
+	// Checks if left border has set
+	fmt.Println(border&Left == Left) // true
+
+	// Removes left border
+	border = border &^ Left
+	fmt.Println(border == Bottom) // true
+
 }
 ```
 
