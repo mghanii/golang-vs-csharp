@@ -64,6 +64,7 @@ Code examples are availaleble in [examples/](examples/)
   - [Atomic operations](#atomicoperations)
 - [Worker pools](#workerpool)
 - [Generics](#generics)
+- [Events](#events)
 - [Sorting](#sorting)
 - [Swapping](#swapping)
 - [Timeout](#timeout)
@@ -3441,6 +3442,185 @@ class Program
 ```go
 ints := []int{1, 2, 3, 4}
 strings := []string{"A", "B", "C"}
+```
+
+<h3 id=events>🔶 Events</h3>
+
+---
+
+#### C&#35;
+
+```cs
+using System;
+
+class EmailChangedEventArgs : EventArgs
+{
+  public readonly string OldEmail, NewEmail;
+
+  public EmailChangedEventArgs(string oldEmail, string newEmail)
+  {
+    OldEmail = oldEmail;
+    NewEmail = newEmail;
+  }
+}
+
+class Person
+{
+  public string Username { get; }
+
+  private string _email;
+
+  public string Email
+  {
+    get { return _email; }
+    set
+    {
+      if (_email == value) return;
+      var oldEmail = _email;
+      _email = value;
+      EmailUpdated(this, new EmailChangedEventArgs(oldEmail, _email));
+    }
+  }
+
+  public Person(string username) => Username = username;
+
+  public event EventHandler<EmailChangedEventArgs> EmailUpdated = delegate { };
+}
+
+class Program
+{
+  static void Main(string[] args)
+  {
+    var person = new Person("Adam");
+    person.EmailUpdated += PersonEmailUpdated;
+    person.Email = "first@first.com";
+    person.Email = "second@second.com";
+    // unsubscribe
+    person.EmailUpdated -= PersonEmailUpdated;
+    person.Email = "third@third.com";
+  }
+
+  static void PersonEmailUpdated(object sender, EmailChangedEventArgs e)
+  {
+    var person = sender as Person;
+    var msg = $"{person.Username} changed his email from '{e.OldEmail}' to '{e.NewEmail}'";
+    Console.WriteLine(msg);
+  }
+}
+```
+
+output
+
+```bash
+Adam changed his email from '' to 'first@first.com'
+Adam changed his email from 'first@first.com' to 'second@second.com'
+```
+
+#### Go: events
+
+- Go doesn't support events as a language feature as C# does.
+- Events in Go can be implemented using channels.
+
+```go
+package main
+
+import (
+	"fmt"
+)
+
+type EventEmitter map[string][]chan string
+
+type Person struct {
+	username string
+	email    string
+	emitter  EventEmitter
+}
+
+func (p *Person) UpdateEmail(email string) bool {
+	if p.email != email {
+		msg := fmt.Sprintf("%v updated his email from '%v' to '%v'", p.username, p.email, email)
+		p.email = email
+		p.emitter.Emit("email-updated", msg)
+		return true
+	}
+	return false
+}
+
+func (p *Person) addEmailUpdateListener(ch chan string) {
+	p.emitter.addEventListener("email-updated", ch)
+}
+
+func (p *Person) removeEmailUpdateListener(ch chan string) {
+	p.emitter.removeEventListener("email-updated", ch)
+}
+
+func (emitter EventEmitter) addEventListener(event string, ch chan string) {
+	if _, ok := emitter[event]; ok {
+		emitter[event] = append(emitter[event], ch)
+	} else {
+		emitter[event] = []chan string{ch}
+	}
+}
+func (emitter EventEmitter) removeEventListener(event string, ch chan string) {
+
+	if _, ok := emitter[event]; ok {
+		listeners := emitter[event]
+		for i := range listeners {
+			if listeners[i] == ch {
+				emitter[event] = append(listeners[:i], listeners[i+1:]...)
+				break
+			}
+		}
+	}
+}
+
+func (emitter EventEmitter) Emit(event string, msg string) {
+	if _, ok := emitter[event]; ok {
+		for _, handler := range emitter[event] {
+			go func(handler chan string) {
+				handler <- msg
+			}(handler)
+		}
+	}
+}
+
+func main() {
+
+	p := Person{
+		username: "Adam",
+		email:    "first@first.com",
+		emitter:  EventEmitter{},
+	}
+
+	listeners := []chan string{
+		make(chan string),
+		make(chan string),
+	}
+	for i, ch := range listeners {
+		p.addEmailUpdateListener(ch)
+		go func(c chan string, j int) {
+			for {
+				msg := <-c
+				fmt.Printf("listener#%v: %v\n", j, msg)
+			}
+		}(ch, i)
+	}
+
+	p.UpdateEmail("second@second.com")
+	// Removes listener#0
+	p.removeEmailUpdateListener(listeners[0])
+	p.UpdateEmail("third@third.com")
+
+	fmt.Scanln()
+}
+```
+
+output
+
+```bash
+listener#0: Adam updated his email from 'first@first.com' to 'second@second.com'
+listener#1: Adam updated his email from 'first@first.com' to 'second@second.com'
+listener#1: Adam updated his email from 'second@second.com' to 'third@third.com'
 ```
 
 <h3 id=sorting>🔶 Sorting</h3>
