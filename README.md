@@ -3519,7 +3519,7 @@ Adam updated his email from 'first@first.com' to 'second@second.com'
 #### Go: events
 
 - Go doesn't support events as a language feature as C# does.
-- Events in Go can be implemented using channels.
+- Events in Go can be implemented using channels, as in this [package](https://github.com/mghanii/go-events).
 
 ```go
 package main
