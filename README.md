@@ -3453,11 +3453,11 @@ strings := []string{"A", "B", "C"}
 ```cs
 using System;
 
-class EmailChangedEventArgs : EventArgs
+class EmailUpdatedEventArgs : EventArgs
 {
   public readonly string OldEmail, NewEmail;
 
-  public EmailChangedEventArgs(string oldEmail, string newEmail)
+  public EmailUpdatedEventArgs(string oldEmail, string newEmail)
   {
     OldEmail = oldEmail;
     NewEmail = newEmail;
@@ -3478,13 +3478,13 @@ class Person
       if (_email == value) return;
       var oldEmail = _email;
       _email = value;
-      EmailUpdated(this, new EmailChangedEventArgs(oldEmail, _email));
+      EmailUpdated(this, new EmailUpdatedEventArgs(oldEmail, _email));
     }
   }
 
   public Person(string username) => Username = username;
 
-  public event EventHandler<EmailChangedEventArgs> EmailUpdated = delegate { };
+  public event EventHandler<EmailUpdatedEventArgs> EmailUpdated = delegate { };
 }
 
 class Program
@@ -3500,10 +3500,10 @@ class Program
     person.Email = "third@third.com";
   }
 
-  static void PersonEmailUpdated(object sender, EmailChangedEventArgs e)
+  static void PersonEmailUpdated(object sender, EmailUpdatedEventArgs e)
   {
     var person = sender as Person;
-    var msg = $"{person.Username} changed his email from '{e.OldEmail}' to '{e.NewEmail}'";
+    var msg = $"{person.Username} updated his email from '{e.OldEmail}' to '{e.NewEmail}'";
     Console.WriteLine(msg);
   }
 }
@@ -3512,8 +3512,8 @@ class Program
 output
 
 ```bash
-Adam changed his email from '' to 'first@first.com'
-Adam changed his email from 'first@first.com' to 'second@second.com'
+Adam updated his email from '' to 'first@first.com'
+Adam updated his email from 'first@first.com' to 'second@second.com'
 ```
 
 #### Go: events
