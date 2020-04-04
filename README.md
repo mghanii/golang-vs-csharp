@@ -72,6 +72,8 @@ Code examples are availaleble in [examples/](examples/)
 - [Swapping](#swapping)
 - [Timeout](#timeout)
 - [Regular Expressions](#regex)
+- [Attributes](#attributes)
+  - [Tags](#tags)
 
 <h3 id=comments>🔶 Comments</h3>
 
@@ -4079,4 +4081,85 @@ true
 true
 peach
 [1 2 3 4 5]
+```
+
+<h3 id=attributes>🔶 Attributes</h3>
+
+---
+
+- Attributes are used to convey information/metadata to runtime about various code elements such as methods, assemblies, properties, types.
+- Attributes are discoverable at runtime via reflection.
+
+#### C&#35;
+
+```cs
+using System;
+
+[AttributeUsage(AttributeTargets.Property)]
+class StringLengthAttribute : Attribute
+{
+  public int MinLength { get; }
+  public int MaxLength { get; }
+
+  public StringLengthAttribute(int minLength, int maxLength)
+  {
+    MinLength = minLength;
+    MaxLength = maxLength;
+  }
+}
+
+class Person
+{
+  [StringLength(minLength: 3, maxLength: 50)]
+  public string Name { get; set; }
+}
+
+class Program
+{
+  static void Main(string[] args)
+  {
+    var propertyInfos = typeof(Person).GetProperties();
+
+    foreach (var p in propertyInfos)
+    {
+      var att = (StringLengthAttribute)Attribute.GetCustomAttribute(p, typeof(StringLengthAttribute));
+      if (att != null)
+      {
+        Console.Write($"The max length for the {p} property is: {att.MaxLength}\n");
+        Console.Write($"The min length for the {p} property is: {att.MinLength}\n");
+      }
+    }
+  }
+}
+```
+
+output
+
+```bash
+The max length for the System.String Name property is: 50
+The min length for the System.String Name property is: 3
+```
+
+<h4 id=tags>Go: tags</h4>
+
+Go doesn't have attributes, but have struct tags which are discoverable via reflection.
+
+```go
+package main
+
+import(
+"fmt"
+"reflect"
+)
+
+type  Person struct{
+	Name string `json:"name"`
+}
+
+func main()  {
+
+	t:= reflect.TypeOf(Person{})
+	f, _ := t.FieldByName("Name")
+	fmt.Println(f.Tag) // json:"name"
+}
 ```
