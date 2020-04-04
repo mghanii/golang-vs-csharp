@@ -55,6 +55,9 @@ Code examples are availaleble in [examples/](examples/)
   - [defer](#gocleanup)
 - [Inheritance](#inheritance)
 - [Polymorphism](#polymorphism)
+- [Encapsulation](#encapsulation)
+  - [Access modifiers](#encapsulation)
+  - [Exported types](#goaccessrights)
 - [Pointers](#pointers)
 - [Concurrency](#concurrency)
   - [async / await(C#)](#concurrency)
@@ -2816,6 +2819,81 @@ output
 ```bash
 area of Square is 9
 area of Circle is 28.274333882308138
+```
+
+<h3 id=encapsulation>🔶 Encapsulation</h3>
+
+---
+
+#### C&#35;
+
+##### C# has 5 access modifiers used to limit type or type member accessibility:
+
+- <b>public</b>: accessible within the containing assembly or any other assemblies.
+- <b>internal</b>: accessible within the contatining assembly (or friend assemblies).
+- <b>private</b>: accessible only within the containing struct or class.
+- <b>protected</b>: accessible only within the containing struct or class or subclasses.
+- <b>protected internal</b>: accessible only within the containing assembly or subclasses from any assembly.
+
+```cs
+public class A // A is accessed by code from any assembly.
+{
+  // _field1 is accessible only within A class ( fields are private by default).
+  int _field1;
+  protected internal int _field2;
+  protected virtual void MethodA() => _; // accessible only within A or B classes
+}
+
+class B : A // B is internal (class by default is internal)
+{
+  protected void MethodB()
+  {
+    base._field1; // error: can't access _field1
+    base.MethodA();
+  }
+}
+
+// if C is defined in a different assembly than A's assembly, it must subclass A to access _field2
+internal class C
+{
+  public C()
+  {
+    var a = new A();
+    var x = a._field2;
+    a.MethodA(); // error: can't access MethodA
+  }
+}
+```
+
+<h4 id=goaccessrights>Go: access rights</h4>
+
+##### A package is the smallest unit of private encap­sulation in Go.
+
+Identifiers in Go are:
+
+- <b>Exported</b>: an exported identifier starts with a capital letter and can be accessed from another different package.
+
+- <b>Unexported</b>: unexported identifier starts with a lowercase letter and can only be accessed within the same package.
+
+```go
+package main
+
+import "fmt"
+
+// unexported method, accessible only within 'main' package
+func saySomething() {
+	fmt.Println("Hi......")
+}
+
+// exported type, visible to other packages
+type ExportedStruct struct {
+  field1 string // unexported field
+  Field2 string // exported field
+}
+
+func main() {
+	saySomething()
+}
 ```
 
 <h3 id=pointers>🔶 Pointers</h3>
