@@ -11,8 +11,6 @@ This tutorial is intended to help developers learn Go coming from a C# developme
 
 Code examples are availaleble in [examples/](examples/)
 
-## [Contributing](#contribution)
-
 ## Examples
 
 - [Comments](#comments)
@@ -2646,7 +2644,7 @@ func main() {
 
 ---
 
-- Inheritance is "is a" relationship: Dog is an Animal.
+- Inheritance is "is a" relationship: 🐶 is an Animal.
 - Method overriding: change the implementation of a function  
    in the derived class that is defined in the base class.
 - C# doesn't support multiple inheritance through classes.
@@ -2717,13 +2715,13 @@ type Animal struct {
 }
 
 // struct embed­ding
-type Dog struct {
+type Dog struct { //🐶
 	Animal
 	breed string
 }
 
 // struct composition
-type Cat struct {
+type Cat struct { // 🐱
 	pet Animal
 }
 
@@ -2920,7 +2918,7 @@ When you pass a variable to a method:
 ```cs
 using System;
 
-class Cat
+class Cat // 🐱
 {
   public string Name { get; set; }
 }
@@ -3013,7 +3011,7 @@ func pointerTest(v *int) {
 	*v = 5
 }
 
-type Cat struct{ name string }
+type Cat struct{ name string } // 🐱
 
 // value receiver doesn't mutate state
 func (c Cat) valReceiverTest() {
@@ -3716,7 +3714,7 @@ listener#1: Adam updated his email from 'second@second.com' to 'third@third.com'
 ```cs
 using System;
 using System.Linq;
-
+// 🐱
 class Cat : IComparable<Cat>
 {
   public string Name { get; set; }
@@ -3800,7 +3798,7 @@ import (
 	"sort"
 )
 
-type Cat struct {
+type Cat struct { // 🐱
 	Name string
 	Age  int
 }
