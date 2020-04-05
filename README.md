@@ -4240,9 +4240,7 @@ class Program
           .ToDictionary(x => x[0], x => x[1]);
 
       foreach (var kv in flags)
-      {
         Console.Write($"{kv.Key}: {kv.Value}\n");
-      }
     }
   }
 }
