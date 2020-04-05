@@ -4249,9 +4249,9 @@ class Program
 output
 
 ```bash
-❯ ConsoleApp5.exe a1=somevalue  a2=someothervalue
-a1: somevalue
-a2: someothervalue
+❯ ConsoleApp5.exe default-user=adam  disable-log=true
+default-user: adam
+disable-log: true
 ```
 
 #### Go
@@ -4273,9 +4273,9 @@ func main() {
 
 	flag.Parse()
 
-	fmt.Println(*strPtr)
-	fmt.Println(*numPtr)
-	fmt.Println(*&boolPtr)
+	fmt.Println("default-user:", *strPtr)
+	fmt.Println("log-level:", *numPtr)
+	fmt.Println("disable-log:", *&boolPtr)
 }
 ```
 
@@ -4283,7 +4283,7 @@ output
 
 ```bash
 ❯ go run  examples/cli-flags.go -default-user=adam  -disable-log=true
-adam
-2
-true
+default-user: adam
+log-level: 2
+disable-log: true
 ```

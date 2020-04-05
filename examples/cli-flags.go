@@ -14,7 +14,7 @@ func main() {
 
 	flag.Parse()
 
-	fmt.Println(*strPtr)
-	fmt.Println(*numPtr)
-	fmt.Println(*&boolPtr)
+	fmt.Println("default-user:", *strPtr)
+	fmt.Println("log-level:", *numPtr)
+	fmt.Println("disable-log:", *&boolPtr)
 }
