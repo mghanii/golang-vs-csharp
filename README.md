@@ -75,6 +75,7 @@ Code examples are availaleble in [examples/](examples/)
 - [Attributes](#attributes)
   - [Tags](#tags)
 - [Command-Line Arguments](#cliargs)
+- [Command-Line Flags](#cliflags)
 
 <h3 id=comments>🔶 Comments</h3>
 
@@ -4216,4 +4217,75 @@ output
 ```bash
 ❯ go run  examples/cli-args.go  arg1 arg2 arg3
 [arg1 arg2 arg3]
+```
+
+<h3 id=cliflags>🔶 Command-Line Flags</h3>
+
+---
+
+#### C&#35;
+
+```cs
+using System;
+using System.Linq;
+
+class Program
+{
+  static void Main(string[] args)
+  {
+    if (args.Length > 0)
+    {
+      var flags = args
+          .Select(x => x.Split('='))
+          .ToDictionary(x => x[0], x => x[1]);
+
+      foreach (var kv in flags)
+      {
+        Console.Write($"{kv.Key}: {kv.Value}\n");
+      }
+    }
+  }
+}
+```
+
+output
+
+```bash
+❯ ConsoleApp5.exe a1=somevalue  a2=someothervalue
+a1: somevalue
+a2: someothervalue
+```
+
+#### Go
+
+```go
+package main
+
+import (
+	"flag"
+	"fmt"
+)
+
+func main() {
+
+	strPtr := flag.String("default-user", "guest", "default username")
+	numPtr := flag.Int("log-level", 2, "log level")
+	var boolPtr bool
+	flag.BoolVar(&boolPtr, "disable-log", false, "disable logs")
+
+	flag.Parse()
+
+	fmt.Println(*strPtr)
+	fmt.Println(*numPtr)
+	fmt.Println(*&boolPtr)
+}
+```
+
+output
+
+```bash
+❯ go run  examples/cli-flags.go -default-user=adam  -disable-log=true
+adam
+2
+true
 ```
