@@ -11,7 +11,15 @@ This tutorial is intended to help developers learn Go coming from a C# developme
 
 Code examples are availaleble in [examples/](examples/)
 
-## Examples
+### Contributing
+
+👍🎉 First off, thank you for taking the time to contribute!
+
+- Please open a pull request for new additions.
+- Make sure your code examples lint and build.
+- Report issues.
+
+### Contents
 
 - [Comments](#comments)
 - [Variables](#variables)
@@ -4287,13 +4295,3 @@ default-user: adam
 log-level: 2
 disable-log: true
 ```
-
-## Contribution
-
----
-
-👍🎉 First off, thank you for taking the time to contribute!
-
-- Please open a pull request for new additions.
-- Make sure your code examples lint and build.
-- Report issues.
