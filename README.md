@@ -74,6 +74,7 @@ Code examples are availaleble in [examples/](examples/)
 - [Regular Expressions](#regex)
 - [Attributes](#attributes)
   - [Tags](#tags)
+- [Command-Line Arguments](#cliargs)
 
 <h3 id=comments>🔶 Comments</h3>
 
@@ -4162,4 +4163,57 @@ func main()  {
 	f, _ := t.FieldByName("Name")
 	fmt.Println(f.Tag) // json:"name"
 }
+```
+
+<h3 id=cliargs>🔶 Command-Line Arguments</h3>
+
+---
+
+#### C&#35;
+
+```cs
+using System;
+
+class Program
+{
+  static void Main(string[] args)
+  {
+    if (args.Length > 0)
+    {
+      foreach (var arg in args)
+        Console.Write(arg + " ");
+    }
+  }
+}
+```
+
+output
+
+```bash
+❯ cli-args.exe arg1 arg2 arg3
+arg1 arg2 arg3
+```
+
+#### Go
+
+```go
+package main
+
+import (
+	"fmt"
+	"os"
+)
+
+func main() {
+
+	args := os.Args[1:] // first value is program path
+	fmt.Println(args)
+}
+```
+
+output
+
+```bash
+❯ go run  examples/cli-args.go  arg1 arg2 arg3
+[arg1 arg2 arg3]
 ```
