@@ -4249,7 +4249,7 @@ class Program
 output
 
 ```bash
-❯ ConsoleApp5.exe default-user=adam  disable-log=true
+❯ cli-flags.exe default-user=adam  disable-log=true
 default-user: adam
 disable-log: true
 ```
