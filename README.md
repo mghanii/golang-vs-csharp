@@ -84,6 +84,7 @@ Code examples are availaleble in [examples/](examples/)
   - [Tags](#tags)
 - [Command-Line Arguments](#cliargs)
 - [Command-Line Flags](#cliflags)
+- [Testing](#testing)
 
 <h3 id=comments>🔶 Comments</h3>
 
@@ -4199,7 +4200,7 @@ class Program
 output
 
 ```bash
-❯ cli-args.exe arg1 arg2 arg3
+❯ cli_args.exe arg1 arg2 arg3
 arg1 arg2 arg3
 ```
 
@@ -4223,7 +4224,7 @@ func main() {
 output
 
 ```bash
-❯ go run  examples/cli-args.go  arg1 arg2 arg3
+❯ go run  examples/cli_args.go  arg1 arg2 arg3
 [arg1 arg2 arg3]
 ```
 
@@ -4257,7 +4258,7 @@ class Program
 output
 
 ```bash
-❯ cli-flags.exe default-user=adam  disable-log=true
+❯ cli_flags.exe default-user=adam  disable-log=true
 default-user: adam
 disable-log: true
 ```
@@ -4290,8 +4291,90 @@ func main() {
 output
 
 ```bash
-❯ go run  examples/cli-flags.go -default-user=adam  -disable-log=true
+❯ go run  examples/cli_flags.go -default-user=adam  -disable-log=true
 default-user: adam
 log-level: 2
 disable-log: true
+```
+
+<h3 id=testing>🔶 Testing</h3>
+
+---
+
+#### C&#35;
+
+There are many unit-testing frameworks to test C# code such as NUnit, XUnit, and MSTest.</br>
+The following example uses NUnit:
+
+```cs
+using NUnit.Framework;
+
+class Example
+{
+  public static int Sum(int a, int b) => a + b;
+}
+
+class ExampleTests
+{
+  [TestCase(2, 4, ExpectedResult = 6, TestName = "2+4")]
+  [TestCase(-1, 1, ExpectedResult = 0, TestName = "-1+1")]
+  [TestCase(-5, 3, ExpectedResult = -2, TestName = "-5+3")]
+  public int SumTest(int a, int b)
+  {
+    return Example.Sum(a, b);
+  }
+}
+```
+
+#### Go
+
+The test file should have a name ending in \_test.go
+
+```go
+package example
+
+import (
+	"fmt"
+	"testing"
+)
+
+func sum(a, b int) int {
+	return a + b
+}
+
+func TestSum(t *testing.T) {
+	data := []struct {
+		a, b, sum int
+	}{
+		{2, 4, 6},
+		{-1, 1, 0},
+		{-5, 3, -2},
+	}
+
+	for _, tt := range data {
+		name := fmt.Sprintf("%d+%d", tt.a, tt.b)
+		t.Run(name, func(t *testing.T) {
+			res := sum(tt.a, tt.b)
+			if res != tt.sum {
+				t.Errorf("expected %d, actual %d", tt.sum, res)
+			}
+		})
+	}
+}
+```
+
+output
+
+```bash
+❯ go test -v examples\example_test.go
+=== RUN   TestSum
+=== RUN   TestSum/2+4
+=== RUN   TestSum/-1+1
+=== RUN   TestSum/-5+3
+--- PASS: TestSum (0.00s)
+    --- PASS: TestSum/2+4 (0.00s)
+    --- PASS: TestSum/-1+1 (0.00s)
+    --- PASS: TestSum/-5+3 (0.00s)
+PASS
+ok      command-line-arguments  0.414s
 ```
