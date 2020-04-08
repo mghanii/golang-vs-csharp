@@ -65,12 +65,17 @@ func main() {
 
 	// Slicing: constructing a slice from array, slice or string
 	//  a[low : high],  low index is inclusive while high is exclusive
-
 	fmt.Println(s1[:])   // [1 9 3]
 	fmt.Println(s1[0:2]) // [1 9]
 	fmt.Println(s1[:2])  // [1 9]
 	fmt.Println(s1[1:])  // [9 3]
 
+	// Removing an elemment from slice
+	s3 := []int{1, 2, 3, 4}
+	s3 = append(s3[:1], s3[2:]...)
+	fmt.Println(s3) // [1 3 4]
+
+	// Strings are read-only slices of bytes
 	fmt.Println("test"[1:]) // est
 
 }
