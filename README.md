@@ -3206,21 +3206,22 @@ var doneCh = make(chan struct{})
 
 func main() {
 	quotesCount := 5
-  quotesCh := make(chan Quote, quotesCount)
-  // WaitGroup is similar to C#'s Task.WhenAll,
-  // used to wait for multiple goroutines to finish
-	wg := sync.WaitGroup{}
+	quotesCh := make(chan Quote, quotesCount)
+
+	// WaitGroup is similar to C#'s Task.WhenAll,
+	// used to wait for multiple goroutines to finish
+	wg := &sync.WaitGroup{}
 
 	go displayQuotes(quotesCh)
 
 	// get random quotes
 	wg.Add(quotesCount)
 	for i := 0; i < quotesCount; i++ {
-		go func(ch chan<- Quote) {
+		go func(ch chan<- Quote, wg *sync.WaitGroup) {
 			defer wg.Done()
 			quote := getRandomQuote()
 			ch <- quote
-		}(quotesCh)
+		}(quotesCh, wg)
 	}
 
 	wg.Wait()
