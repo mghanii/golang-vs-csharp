@@ -3336,7 +3336,7 @@ func main() {
 
   	// RWMutex: a reader/writer mutual exclusion lock.
 	// The lock can be held by an arbitrary number of readers or a single writer.
-	_ := sync.RWMutex{}
+	_ = sync.RWMutex{}
 }
 ```
 
