@@ -3142,6 +3142,14 @@ internal class Program
 - Channels provide a way for one goroutine to send structured data to another.
 - By default, Go uses CPU threads equal to available cores.
 
+Threads vs Goroutines
+
+| Thread                         | Goroutine                              |
+| ------------------------------ | -------------------------------------- |
+| Managed by OS                  | Managed by Go runtime                  |
+| Has its own execution stack    | Has its own execution stack            |
+| Fixed stack size (around 1 MB) | Variable stack size (starts from 2 KB) |
+
 ```go
 package main
 
