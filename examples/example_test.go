@@ -21,9 +21,9 @@ func TestSum(t *testing.T) {
 	for _, tt := range data {
 		name := fmt.Sprintf("%d+%d", tt.a, tt.b)
 		t.Run(name, func(t *testing.T) {
-			res := sum(tt.a, tt.b)
-			if res != tt.sum {
-				t.Errorf("expected %d, actual %d", tt.sum, res)
+			got := sum(tt.a, tt.b)
+			if got != tt.sum {
+				t.Errorf("expected %d, got %d", tt.sum, got)
 			}
 		})
 	}
