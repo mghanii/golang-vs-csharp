@@ -4340,11 +4340,12 @@ class ExampleTests
 
 #### Go
 
-- Go has a built-in <a href="https://golang.org/pkg/testing/" target="_blank">testing</a> package provided by Go's standard library.
-- Other useful packages conatined within standard library:
-  - <a href="https://golang.org/pkg/testing/quick/" target="_blank">quick</a>: has functions to help with black box testing.
-  - <a href="https://golang.org/pkg/testing/iotest/" target="_blank">iotest</a>: provides Reader and Writer implementations useful for testing.
-  - <a href="https://golang.org/pkg/net/http/httptest/" target="_blank">httptest</a>: provides utilities for HTTP testing.
+Go's standard library has the following testing packages:
+
+- <a href="https://golang.org/pkg/testing/" target="_blank">testing</a>: provides support for automated testing.
+- <a href="https://golang.org/pkg/testing/quick/" target="_blank">quick</a>: has functions to help with black box testing.
+- <a href="https://golang.org/pkg/testing/iotest/" target="_blank">iotest</a>: provides Reader and Writer implementations useful for testing.
+- <a href="https://golang.org/pkg/net/http/httptest/" target="_blank">httptest</a>: provides utilities for HTTP testing.
 
 ```go
 package example
